@@ -12,7 +12,22 @@
       </svg>
       <h1>Angular v21 Signals Forms Showcase</h1>
     </div>
-    <div class="version-tag">Experimental API v21+</div>
+    <div class="header-actions">
+      <div class="theme-selector-wrapper">
+        <span class="theme-label">🎨 Thème Code :</span>
+        <select class="theme-select" (change)="onThemeChange($event)" [value]="selectedTheme()">
+          <option value="prism-tomorrow">Tomorrow Night (Foncé)</option>
+          <option value="prism-okaidia">Okaidia (Foncé)</option>
+          <option value="prism-twilight">Twilight (Foncé)</option>
+          <option value="prism-dark">Sombre (Foncé)</option>
+          <option value="prism-funky">Funky (Foncé)</option>
+          <option value="prism">Classique (Clair)</option>
+          <option value="prism-coy">Coy (Clair)</option>
+          <option value="prism-solarizedlight">Solarized (Clair)</option>
+        </select>
+      </div>
+      <div class="version-tag">Experimental API v21+</div>
+    </div>
   </header>
 
   <!-- Sidebar + Content layout -->

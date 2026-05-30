@@ -27,6 +27,11 @@
                 "glob": "**/*.{ts,html,css}",
                 "input": "src/app/components",
                 "output": "source"
+              },
+              {
+                "glob": "*.css",
+                "input": "node_modules/prismjs/themes",
+                "output": "themes"
               }
             ],
             "styles": [

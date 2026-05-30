@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, inject, OnInit } from '@angular/core';
 import { JsonPipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { CodeHighlightComponent } from '../code-highlight/code-highlight';
 
@@ -16,7 +17,9 @@ interface RegistrationModel {
   styleUrl: './submission.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Submission {
+export class Submission implements OnInit {
+  private http = inject(HttpClient);
+
   // Navigation Tab Signal
   activeTab = signal<'demo' | 'ts' | 'html'>('demo');
 
@@ -31,6 +34,29 @@ export class Submission {
 
   // Custom flag to handle loading state
   isSubmitting = signal<boolean>(false);
+
+  // Source code signals loaded via HTTP at runtime
+  tsCode = signal<string>('Chargement du code TypeScript...');
+  htmlCode = signal<string>('Chargement du code HTML...');
+
+  ngOnInit() {
+    const errorMsg = (filename: string) => 
+      `⚠️ Impossible de charger "${filename}".\n\n` +
+      `💡 Note : La configuration "angular.json" a été modifiée pour copier automatiquement les sources.\n` +
+      `👉 Si vous voyez ce message, veuillez ARRÊTER votre serveur de développement (Ctrl+C) et le RELANCER avec "ng serve" pour appliquer la nouvelle configuration.`;
+
+    this.http.get('/source/submission/submission.ts', { responseType: 'text' })
+      .subscribe({
+        next: code => this.tsCode.set(code),
+        error: () => this.tsCode.set(errorMsg('submission.ts'))
+      });
+
+    this.http.get('/source/submission/submission.html', { responseType: 'text' })
+      .subscribe({
+        next: code => this.htmlCode.set(code),
+        error: () => this.htmlCode.set(errorMsg('submission.html'))
+      });
+  }
 
   // Defining the form with validation AND submission action configuration
   registerForm = form(
@@ -67,58 +93,4 @@ export class Submission {
     this.registerForm().reset({ ...this.INITIAL_MODEL });
     console.log('Formulaire réinitialisé manuellement.');
   }
-
-  // Raw source codes
-  tsCode = `import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { form, FormField, FormRoot, required } from '@angular/forms/signals';
-
-interface RegistrationModel { fullName: string; newsletterOptIn: boolean; termsAccepted: boolean; }
-
-@Component({
-  selector: 'app-submission',
-  imports: [FormRoot, FormField],
-  templateUrl: './submission.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class Submission {
-  private readonly INITIAL_MODEL = { fullName: '', newsletterOptIn: false, termsAccepted: false };
-  registerModel = signal<RegistrationModel>({ ...this.INITIAL_MODEL });
-  isSubmitting = signal(false);
-
-  registerForm = form(
-    this.registerModel,
-    (schemaPath) => {
-      required(schemaPath.fullName, { message: 'Nom obligatoire' });
-      required(schemaPath.termsAccepted, { message: 'Veuillez accepter les CGU' });
-    },
-    {
-      submission: {
-        action: async (f) => {
-          this.isSubmitting.set(true);
-          await new Promise(r => setTimeout(r, 2000)); // Simulate save
-          alert('Succès !');
-          this.isSubmitting.set(false);
-          
-          // f().reset clears touched/dirty, updates form model values
-          f().reset({ ...this.INITIAL_MODEL });
-        }
-      }
-    }
-  );
-}`;
-
-  htmlCode = `<!-- [formRoot] handles browser submit, sets novalidate, touches all fields -->
-<form [formRoot]="registerForm">
-  <input type="text" [formField]="registerForm.fullName" />
-  @if (registerForm.fullName().touched() && registerForm.fullName().invalid()) {
-    <span>⚠️ {{ registerForm.fullName().errors()[0]?.message }}</span>
-  }
-
-  <input type="checkbox" [formField]="registerForm.newsletterOptIn" />
-  <input type="checkbox" [formField]="registerForm.termsAccepted" />
-
-  <button type="submit" [disabled]="isSubmitting()">
-    @if (isSubmitting()) { <span>⏳ Chargement...</span> } @else { <span>Soumettre</span> }
-  </button>
-</form>`;
 }

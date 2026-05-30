@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, inject, OnInit } from '@angular/core';
 import { JsonPipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { form, FormField, required, hidden, disabled, readonly } from '@angular/forms/signals';
 import { CodeHighlightComponent } from '../code-highlight/code-highlight';
 
@@ -28,7 +29,9 @@ interface ProfileModel {
   styleUrl: './profile.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Profile {
+export class Profile implements OnInit {
+  private http = inject(HttpClient);
+
   // Navigation Tab Signal
   activeTab = signal<'demo' | 'ts' | 'html'>('demo');
 
@@ -50,6 +53,29 @@ export class Profile {
       city: '',
     },
   });
+
+  // Source code signals loaded via HTTP at runtime
+  tsCode = signal<string>('Chargement du code TypeScript...');
+  htmlCode = signal<string>('Chargement du code HTML...');
+
+  ngOnInit() {
+    const errorMsg = (filename: string) => 
+      `⚠️ Impossible de charger "${filename}".\n\n` +
+      `💡 Note : La configuration "angular.json" a été modifiée pour copier automatiquement les sources.\n` +
+      `👉 Si vous voyez ce message, veuillez ARRÊTER votre serveur de développement (Ctrl+C) et le RELANCER avec "ng serve" pour appliquer la nouvelle configuration.`;
+
+    this.http.get('/source/profile/profile.ts', { responseType: 'text' })
+      .subscribe({
+        next: code => this.tsCode.set(code),
+        error: () => this.tsCode.set(errorMsg('profile.ts'))
+      });
+
+    this.http.get('/source/profile/profile.html', { responseType: 'text' })
+      .subscribe({
+        next: code => this.htmlCode.set(code),
+        error: () => this.htmlCode.set(errorMsg('profile.html'))
+      });
+  }
 
   // Defining the form tree with conditional availability rules
   profileForm = form(this.profileModel, (schemaPath) => {
@@ -90,76 +116,4 @@ export class Profile {
     console.log('Profil mis à jour avec succès !', this.profileModel());
     alert('Profil sauvegardé !');
   }
-
-  // Raw source codes for tab view
-  tsCode = `import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { form, FormField, required, hidden, disabled, readonly } from '@angular/forms/signals';
-
-@Component({
-  selector: 'app-profile',
-  imports: [FormField],
-  templateUrl: './profile.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class Profile {
-  profileModel = signal({
-    userId: 'USER-98214',
-    username: 'dev_signals',
-    email: 'contact@signals.dev',
-    isPublic: false,
-    publicUrl: '',
-    lockProfile: false,
-    address: { street: '12 Rue des Signaux', city: 'Paris' },
-    requiresBackupAddress: false,
-    backupAddress: { street: '', city: '' }
-  });
-
-  profileForm = form(this.profileModel, (schemaPath) => {
-    // Readonly rule
-    readonly(schemaPath.userId);
-
-    // Conditional Disabled: disabled when lockProfile is true
-    disabled(schemaPath.username, ({ valueOf }) => valueOf(schemaPath.lockProfile));
-    disabled(schemaPath.email, ({ valueOf }) => valueOf(schemaPath.lockProfile));
-
-    // Conditional Hidden: hidden when isPublic is false
-    hidden(schemaPath.publicUrl, ({ valueOf }) => !valueOf(schemaPath.isPublic));
-    required(schemaPath.publicUrl, { message: 'URL publique requise' });
-
-    // Nested object validations
-    required(schemaPath.address.street);
-    required(schemaPath.address.city);
-
-    // Conditional Hidden Nested fields: hidden when requiresBackupAddress is false
-    hidden(schemaPath.backupAddress.street, ({ valueOf }) => !valueOf(schemaPath.requiresBackupAddress));
-    hidden(schemaPath.backupAddress.city, ({ valueOf }) => !valueOf(schemaPath.requiresBackupAddress));
-    required(schemaPath.backupAddress.street);
-    required(schemaPath.backupAddress.city);
-  });
-}`;
-
-  htmlCode = `<form (submit)="onSubmit($event)">
-  <!-- Readonly static field -->
-  <input type="text" [formField]="profileForm.userId" />
-
-  <!-- Lock checkbox disables other fields -->
-  <input type="checkbox" [formField]="profileForm.lockProfile" />
-
-  <!-- Disabled conditionally -->
-  <input type="text" [formField]="profileForm.username" />
-
-  <!-- Hidden conditionally -->
-  @if (!profileForm.publicUrl().hidden()) {
-    <input type="text" [formField]="profileForm.publicUrl" />
-  }
-
-  <!-- Nested Address fields -->
-  <input type="text" [formField]="profileForm.address.street" />
-  <input type="text" [formField]="profileForm.address.city" />
-
-  <!-- Hidden dynamically -->
-  @if (profileForm.requiresBackupAddress().value()) {
-    <input type="text" [formField]="profileForm.backupAddress.street" />
-  }
-</form>`;
 }

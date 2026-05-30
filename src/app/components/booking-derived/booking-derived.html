@@ -123,11 +123,11 @@
     }
 
     @if (activeTab() === 'ts') {
-      <app-code-highlight [code]="tsCode" language="typescript"></app-code-highlight>
+      <app-code-highlight [code]="tsCode()" language="typescript"></app-code-highlight>
     }
 
     @if (activeTab() === 'html') {
-      <app-code-highlight [code]="htmlCode" language="markup"></app-code-highlight>
+      <app-code-highlight [code]="htmlCode()" language="markup"></app-code-highlight>
     }
   </div>
 </div>

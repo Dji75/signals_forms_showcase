@@ -1,3 +1,5 @@
+@import "prismjs/themes/prism-tomorrow.css";
+
 /* Global variables & resets */
 :root {
   --primary-color: #e23237; /* Angular Red */
@@ -420,3 +422,72 @@ pre {
 .font-bold {
   font-weight: 700;
 }
+
+/* Tab Viewer Styles */
+.showcase-card {
+  background-color: var(--panel-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  max-width: 950px;
+  margin: 0 auto;
+}
+
+.tab-headers {
+  display: flex;
+  background-color: #f1f5f9;
+  border-bottom: 1px solid #cbd5e1;
+  padding: 0 1rem;
+}
+
+.tab-btn {
+  padding: 1rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tab-btn:hover {
+  color: var(--text-main);
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.tab-btn.active {
+  color: var(--secondary-color);
+  border-bottom-color: var(--secondary-color);
+  background-color: #ffffff;
+}
+
+.tab-content {
+  padding: 2rem;
+}
+
+.code-pre {
+  background-color: #0f172a;
+  color: #e2e8f0;
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  max-height: 600px;
+  border: 1px solid #1e293b;
+}
+
+.code-pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+}
+

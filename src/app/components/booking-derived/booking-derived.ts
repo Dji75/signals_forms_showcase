@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, signal, computed } from '@angular/core';
 import { JsonPipe, UpperCasePipe } from '@angular/common';
 import { form, FormField, required, min, max, validate } from '@angular/forms/signals';
+import { CodeHighlightComponent } from '../code-highlight/code-highlight';
 
 interface BookingModel {
   ticketType: string;
@@ -10,12 +11,15 @@ interface BookingModel {
 
 @Component({
   selector: 'app-booking-derived',
-  imports: [FormField, JsonPipe, UpperCasePipe],
+  imports: [FormField, JsonPipe, UpperCasePipe, CodeHighlightComponent],
   templateUrl: './booking-derived.html',
   styleUrl: './booking-derived.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookingDerived {
+  // Navigation Tab Signal
+  activeTab = signal<'demo' | 'ts' | 'html'>('demo');
+
   // Model signal
   bookingModel = signal<BookingModel>({
     ticketType: 'standard',
@@ -104,4 +108,63 @@ export class BookingDerived {
     console.log('Réservation validée !', this.bookingModel());
     alert(`Réservation confirmée !\nTotal à payer : ${this.totalPrice()} €`);
   }
+
+  // Raw source codes
+  tsCode = `import { ChangeDetectionStrategy, Component, signal, computed } from '@angular/core';
+import { form, FormField, required, min, max, validate } from '@angular/forms/signals';
+
+interface BookingModel { ticketType: string; quantity: number; couponCode: string; }
+
+@Component({
+  selector: 'app-booking-derived',
+  imports: [FormField],
+  templateUrl: './booking-derived.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class BookingDerived {
+  bookingModel = signal<BookingModel>({ ticketType: 'standard', quantity: 1, couponCode: '' });
+
+  bookingForm = form(this.bookingModel, (schemaPath) => {
+    required(schemaPath.ticketType);
+    required(schemaPath.quantity);
+    min(schemaPath.quantity, 1);
+    max(schemaPath.quantity, 10);
+
+    // Cross-field Validation: VIP limit
+    // Re-evaluates reactively when EITHER ticketType OR quantity changes!
+    validate(schemaPath.quantity, ({ value, valueOf }) => {
+      const type = valueOf(schemaPath.ticketType);
+      const qty = value();
+      if (type === 'vip' && qty > 4) {
+        return { kind: 'vipLimitExceeded', message: 'Maximum 4 billets VIP !' };
+      }
+      return null;
+    });
+  });
+
+  ticketPrices: Record<string, number> = { standard: 25, vip: 75, student: 15 };
+
+  // Base price computed directly from form values!
+  basePrice = computed(() => {
+    const type = this.bookingForm.ticketType().value();
+    const qty = this.bookingForm.quantity().value();
+    return (this.ticketPrices[type] || 0) * qty;
+  });
+}`;
+
+  htmlCode = `<form (submit)="onSubmit($event)">
+  <select [formField]="bookingForm.ticketType">
+    <option value="standard">Standard (25 €)</option>
+    <option value="vip">VIP (75 €)</option>
+    <option value="student">Étudiant (15 €)</option>
+  </select>
+
+  <input type="number" [formField]="bookingForm.quantity" />
+  @if (bookingForm.quantity().touched() && bookingForm.quantity().invalid()) {
+    <span>⚠️ {{ bookingForm.quantity().errors()[0]?.message }}</span>
+  }
+
+  <!-- Render derived values directly from computed() signals -->
+  <p>Prix de base: {{ basePrice() }} €</p>
+</form>`;
 }

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { form, FormField, FormRoot, required } from '@angular/forms/signals';
+import { CodeHighlightComponent } from '../code-highlight/code-highlight';
 
 interface RegistrationModel {
   fullName: string;
@@ -10,12 +11,15 @@ interface RegistrationModel {
 
 @Component({
   selector: 'app-submission',
-  imports: [FormRoot, FormField, JsonPipe],
+  imports: [FormRoot, FormField, JsonPipe, CodeHighlightComponent],
   templateUrl: './submission.html',
   styleUrl: './submission.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Submission {
+  // Navigation Tab Signal
+  activeTab = signal<'demo' | 'ts' | 'html'>('demo');
+
   private readonly INITIAL_MODEL: RegistrationModel = {
     fullName: '',
     newsletterOptIn: false,
@@ -63,4 +67,58 @@ export class Submission {
     this.registerForm().reset({ ...this.INITIAL_MODEL });
     console.log('Formulaire réinitialisé manuellement.');
   }
+
+  // Raw source codes
+  tsCode = `import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { form, FormField, FormRoot, required } from '@angular/forms/signals';
+
+interface RegistrationModel { fullName: string; newsletterOptIn: boolean; termsAccepted: boolean; }
+
+@Component({
+  selector: 'app-submission',
+  imports: [FormRoot, FormField],
+  templateUrl: './submission.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Submission {
+  private readonly INITIAL_MODEL = { fullName: '', newsletterOptIn: false, termsAccepted: false };
+  registerModel = signal<RegistrationModel>({ ...this.INITIAL_MODEL });
+  isSubmitting = signal(false);
+
+  registerForm = form(
+    this.registerModel,
+    (schemaPath) => {
+      required(schemaPath.fullName, { message: 'Nom obligatoire' });
+      required(schemaPath.termsAccepted, { message: 'Veuillez accepter les CGU' });
+    },
+    {
+      submission: {
+        action: async (f) => {
+          this.isSubmitting.set(true);
+          await new Promise(r => setTimeout(r, 2000)); // Simulate save
+          alert('Succès !');
+          this.isSubmitting.set(false);
+          
+          // f().reset clears touched/dirty, updates form model values
+          f().reset({ ...this.INITIAL_MODEL });
+        }
+      }
+    }
+  );
+}`;
+
+  htmlCode = `<!-- [formRoot] handles browser submit, sets novalidate, touches all fields -->
+<form [formRoot]="registerForm">
+  <input type="text" [formField]="registerForm.fullName" />
+  @if (registerForm.fullName().touched() && registerForm.fullName().invalid()) {
+    <span>⚠️ {{ registerForm.fullName().errors()[0]?.message }}</span>
+  }
+
+  <input type="checkbox" [formField]="registerForm.newsletterOptIn" />
+  <input type="checkbox" [formField]="registerForm.termsAccepted" />
+
+  <button type="submit" [disabled]="isSubmitting()">
+    @if (isSubmitting()) { <span>⏳ Chargement...</span> } @else { <span>Soumettre</span> }
+  </button>
+</form>`;
 }

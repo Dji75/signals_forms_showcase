@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { form, FormField, required, hidden, disabled, readonly } from '@angular/forms/signals';
+import { CodeHighlightComponent } from '../code-highlight/code-highlight';
 
 interface ProfileModel {
   userId: string;
@@ -22,12 +23,15 @@ interface ProfileModel {
 
 @Component({
   selector: 'app-profile',
-  imports: [FormField, JsonPipe],
+  imports: [FormField, JsonPipe, CodeHighlightComponent],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Profile {
+  // Navigation Tab Signal
+  activeTab = signal<'demo' | 'ts' | 'html'>('demo');
+
   // Writable signal holding the complete nested form structure
   profileModel = signal<ProfileModel>({
     userId: 'USER-98214',
@@ -86,4 +90,76 @@ export class Profile {
     console.log('Profil mis à jour avec succès !', this.profileModel());
     alert('Profil sauvegardé !');
   }
+
+  // Raw source codes for tab view
+  tsCode = `import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { form, FormField, required, hidden, disabled, readonly } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-profile',
+  imports: [FormField],
+  templateUrl: './profile.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Profile {
+  profileModel = signal({
+    userId: 'USER-98214',
+    username: 'dev_signals',
+    email: 'contact@signals.dev',
+    isPublic: false,
+    publicUrl: '',
+    lockProfile: false,
+    address: { street: '12 Rue des Signaux', city: 'Paris' },
+    requiresBackupAddress: false,
+    backupAddress: { street: '', city: '' }
+  });
+
+  profileForm = form(this.profileModel, (schemaPath) => {
+    // Readonly rule
+    readonly(schemaPath.userId);
+
+    // Conditional Disabled: disabled when lockProfile is true
+    disabled(schemaPath.username, ({ valueOf }) => valueOf(schemaPath.lockProfile));
+    disabled(schemaPath.email, ({ valueOf }) => valueOf(schemaPath.lockProfile));
+
+    // Conditional Hidden: hidden when isPublic is false
+    hidden(schemaPath.publicUrl, ({ valueOf }) => !valueOf(schemaPath.isPublic));
+    required(schemaPath.publicUrl, { message: 'URL publique requise' });
+
+    // Nested object validations
+    required(schemaPath.address.street);
+    required(schemaPath.address.city);
+
+    // Conditional Hidden Nested fields: hidden when requiresBackupAddress is false
+    hidden(schemaPath.backupAddress.street, ({ valueOf }) => !valueOf(schemaPath.requiresBackupAddress));
+    hidden(schemaPath.backupAddress.city, ({ valueOf }) => !valueOf(schemaPath.requiresBackupAddress));
+    required(schemaPath.backupAddress.street);
+    required(schemaPath.backupAddress.city);
+  });
+}`;
+
+  htmlCode = `<form (submit)="onSubmit($event)">
+  <!-- Readonly static field -->
+  <input type="text" [formField]="profileForm.userId" />
+
+  <!-- Lock checkbox disables other fields -->
+  <input type="checkbox" [formField]="profileForm.lockProfile" />
+
+  <!-- Disabled conditionally -->
+  <input type="text" [formField]="profileForm.username" />
+
+  <!-- Hidden conditionally -->
+  @if (!profileForm.publicUrl().hidden()) {
+    <input type="text" [formField]="profileForm.publicUrl" />
+  }
+
+  <!-- Nested Address fields -->
+  <input type="text" [formField]="profileForm.address.street" />
+  <input type="text" [formField]="profileForm.address.city" />
+
+  <!-- Hidden dynamically -->
+  @if (profileForm.requiresBackupAddress().value()) {
+    <input type="text" [formField]="profileForm.backupAddress.street" />
+  }
+</form>`;
 }

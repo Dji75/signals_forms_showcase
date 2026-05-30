@@ -1,0 +1,81 @@
+<div class="form-container">
+  <h2>🚀 Declarative Submission & FormReset</h2>
+  <p class="description">
+    This page demonstrates the native <code>[formRoot]</code> directive which handles browser submission, automatically sets the <code>novalidate</code> attribute, marks all fields as touched (revealing hidden errors) on submit, and runs your async action if the form is valid.
+  </p>
+
+  <!-- Notice the use of [formRoot]="registerForm" -->
+  <form [formRoot]="registerForm">
+    <!-- Full Name -->
+    <div class="form-group">
+      <label for="fullName">Nom Complet</label>
+      <input
+        type="text"
+        id="fullName"
+        placeholder="ex: Charles Babbage"
+        [formField]="registerForm.fullName"
+        [class.is-invalid]="registerForm.fullName().touched() && registerForm.fullName().invalid()"
+      />
+      @if (registerForm.fullName().touched() && registerForm.fullName().invalid()) {
+        <span class="error-text">⚠️ {{ registerForm.fullName().errors()[0]?.message }}</span>
+      }
+    </div>
+
+    <!-- Newsletter Opt-in (Checkbox) -->
+    <div class="form-group">
+      <label class="checkbox-label">
+        <input type="checkbox" [formField]="registerForm.newsletterOptIn" />
+        S'abonner à la newsletter mensuelle
+      </label>
+    </div>
+
+    <!-- Terms and conditions (Checkbox with required validation) -->
+    <div class="form-group">
+      <label class="checkbox-label">
+        <input type="checkbox" [formField]="registerForm.termsAccepted" />
+        J'accepte les conditions générales d'utilisation *
+      </label>
+      @if (registerForm.termsAccepted().touched() && registerForm.termsAccepted().invalid()) {
+        <span class="error-text">⚠️ {{ registerForm.termsAccepted().errors()[0]?.message }}</span>
+      }
+    </div>
+
+    <!-- Actions Row -->
+    <div class="btn-row">
+      <button type="submit" class="btn-primary" [disabled]="isSubmitting()">
+        @if (isSubmitting()) {
+          <span>⏳ Inscription en cours...</span>
+        } @else {
+          <span>S'inscrire (FormRoot Action)</span>
+        }
+      </button>
+
+      <button type="button" class="btn-secondary" (click)="manualReset()" [disabled]="isSubmitting()">
+        🔄 Réinitialiser
+      </button>
+    </div>
+  </form>
+
+  <!-- Debug State Viewers -->
+  <div class="debug-section">
+    <h3>🔍 Submission and Reset state</h3>
+    <div class="debug-grid">
+      <div>
+        <h4>Model (Writable Signal):</h4>
+        <pre>{{ registerModel() | json }}</pre>
+      </div>
+      <div>
+        <h4>Form Submission Flags:</h4>
+        <ul class="states-list">
+          <li><code>registerForm().valid()</code>: <strong [class.text-success]="registerForm().valid()">{{ registerForm().valid() }}</strong></li>
+          <li><code>registerForm().dirty()</code>: <strong>{{ registerForm().dirty() }}</strong></li>
+          <li><code>registerForm().touched()</code>: <strong>{{ registerForm().touched() }}</strong></li>
+          <li><code>isSubmitting()</code>: <strong [class.text-danger]="isSubmitting()">{{ isSubmitting() }}</strong></li>
+        </ul>
+        <p class="explanation-note">
+          💡 <strong>Le rôle de f().reset() :</strong> Lors du reset, Angular Signal Forms efface à la fois les valeurs du modèle signal (pour qu'elles retrouvent l'état initial choisi) mais nettoie aussi tout l'historique d'interaction. Les drapeaux <code>touched</code> et <code>dirty</code> repassent à <code>false</code> afin d'éviter d'afficher les erreurs résiduelles à l'utilisateur !
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

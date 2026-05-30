@@ -1,0 +1,186 @@
+<div class="form-container">
+  <h2>🛡️ Nested Models & Field Availability</h2>
+  <p class="description">
+    This page highlights nested objects and conditional field states: <code>hidden()</code>, <code>disabled()</code>, and <code>readonly()</code>. Notice how hidden/disabled fields do not prevent the form from being valid!
+  </p>
+
+  <form (submit)="onSubmit($event)" novalidate>
+    <div class="row">
+      <!-- Readonly field -->
+      <div class="form-group col">
+        <label for="userId">ID Utilisateur (Readonly fixe)</label>
+        <input type="text" id="userId" [formField]="profileForm.userId" />
+        <small class="info-text">Ce champ est configuré en lecture seule de manière permanente.</small>
+      </div>
+
+      <!-- Lock checkbox -->
+      <div class="form-group col flex-align-end">
+        <label class="checkbox-label">
+          <input type="checkbox" [formField]="profileForm.lockProfile" />
+          🔒 Verrouiller le profil
+        </label>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Username (disabled conditionally) -->
+      <div class="form-group col">
+        <label for="username">Nom d'utilisateur</label>
+        <input
+          type="text"
+          id="username"
+          [formField]="profileForm.username"
+          [class.is-invalid]="profileForm.username().touched() && profileForm.username().invalid()"
+        />
+        @if (profileForm.username().touched() && profileForm.username().invalid()) {
+          <span class="error-text">⚠️ {{ profileForm.username().errors()[0]?.message }}</span>
+        }
+      </div>
+
+      <!-- Email (disabled conditionally) -->
+      <div class="form-group col">
+        <label for="email">Email de contact</label>
+        <input
+          type="email"
+          id="email"
+          [formField]="profileForm.email"
+          [class.is-invalid]="profileForm.email().touched() && profileForm.email().invalid()"
+        />
+        @if (profileForm.email().touched() && profileForm.email().invalid()) {
+          <span class="error-text">⚠️ {{ profileForm.email().errors()[0]?.message }}</span>
+        }
+      </div>
+    </div>
+
+    <!-- Public profile checkbox -->
+    <div class="form-group">
+      <label class="checkbox-label">
+        <input type="checkbox" [formField]="profileForm.isPublic" />
+        🌍 Rendre mon profil public (génère une URL publique)
+      </label>
+    </div>
+
+    <!-- Conditionally hidden field -->
+    @if (!profileForm.publicUrl().hidden()) {
+      <div class="form-group fade-in">
+        <label for="publicUrl">URL Publique du profil</label>
+        <input
+          type="text"
+          id="publicUrl"
+          placeholder="https://mon-portfolio.dev/..."
+          [formField]="profileForm.publicUrl"
+          [class.is-invalid]="profileForm.publicUrl().touched() && profileForm.publicUrl().invalid()"
+        />
+        @if (profileForm.publicUrl().touched() && profileForm.publicUrl().invalid()) {
+          <span class="error-text">⚠️ {{ profileForm.publicUrl().errors()[0]?.message }}</span>
+        }
+      </div>
+    }
+
+    <!-- Nested Address Object -->
+    <fieldset class="form-fieldset">
+      <legend>🏠 Adresse Principale (Objet imbriqué)</legend>
+      <div class="row">
+        <div class="form-group col-2">
+          <label for="street">Rue</label>
+          <input
+            type="text"
+            id="street"
+            [formField]="profileForm.address.street"
+            [class.is-invalid]="profileForm.address.street().touched() && profileForm.address.street().invalid()"
+          />
+          @if (profileForm.address.street().touched() && profileForm.address.street().invalid()) {
+            <span class="error-text">⚠️ Requis</span>
+          }
+        </div>
+        <div class="form-group col">
+          <label for="city">Ville</label>
+          <input
+            type="text"
+            id="city"
+            [formField]="profileForm.address.city"
+            [class.is-invalid]="profileForm.address.city().touched() && profileForm.address.city().invalid()"
+          />
+          @if (profileForm.address.city().touched() && profileForm.address.city().invalid()) {
+            <span class="error-text">⚠️ Requis</span>
+          }
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Backup address checkbox -->
+    <div class="form-group">
+      <label class="checkbox-label">
+        <input type="checkbox" [formField]="profileForm.requiresBackupAddress" />
+        🔄 Ajouter une adresse de secours
+      </label>
+    </div>
+
+    <!-- Conditionally hidden nested fields -->
+    @if (profileForm.requiresBackupAddress().value()) {
+      <fieldset class="form-fieldset fade-in">
+        <legend>🚨 Adresse de secours (Imbrication conditionnelle)</legend>
+        <div class="row">
+          <div class="form-group col-2">
+            <label for="b_street">Rue</label>
+            <input
+              type="text"
+              id="b_street"
+              placeholder="Rue de secours"
+              [formField]="profileForm.backupAddress.street"
+              [class.is-invalid]="profileForm.backupAddress.street().touched() && profileForm.backupAddress.street().invalid()"
+            />
+            @if (profileForm.backupAddress.street().touched() && profileForm.backupAddress.street().invalid()) {
+              <span class="error-text">⚠️ {{ profileForm.backupAddress.street().errors()[0]?.message }}</span>
+            }
+          </div>
+          <div class="form-group col">
+            <label for="b_city">Ville</label>
+            <input
+              type="text"
+              id="b_city"
+              placeholder="Ville de secours"
+              [formField]="profileForm.backupAddress.city"
+              [class.is-invalid]="profileForm.backupAddress.city().touched() && profileForm.backupAddress.city().invalid()"
+            />
+            @if (profileForm.backupAddress.city().touched() && profileForm.backupAddress.city().invalid()) {
+              <span class="error-text">⚠️ {{ profileForm.backupAddress.city().errors()[0]?.message }}</span>
+            }
+          </div>
+        </div>
+      </fieldset>
+    }
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn-primary" [disabled]="profileForm().invalid()">
+      Sauvegarder le Profil
+    </button>
+  </form>
+
+  <!-- Debug State Viewers -->
+  <div class="debug-section">
+    <h3>🔍 State propagation & Availability rules details</h3>
+    <div class="debug-grid">
+      <div>
+        <h4>Model (Writable Signal):</h4>
+        <pre class="small-json">{{ profileModel() | json }}</pre>
+      </div>
+      <div>
+        <h4>Availability and Validation states:</h4>
+        <ul class="states-list">
+          <li><code>profileForm().valid()</code>: <strong [class.text-success]="profileForm().valid()">{{ profileForm().valid() }}</strong></li>
+          <li><code>profileForm.publicUrl().hidden()</code>: <strong>{{ profileForm.publicUrl().hidden() }}</strong></li>
+          <li><code>profileForm.username().disabled()</code>: <strong>{{ profileForm.username().disabled() }}</strong></li>
+          <li>
+            <code>backupAddress.street</code>: 
+            valid = <strong>{{ profileForm.backupAddress.street().valid() }}</strong>, 
+            hidden = <strong class="highlight">{{ profileForm.backupAddress.street().hidden() }}</strong>
+          </li>
+        </ul>
+        <p class="explanation-note">
+          💡 <strong>Note importante :</strong> Si l'adresse de secours est masquée, ses champs vides sont invalides mais n'impactent pas la validité du formulaire parent. Dès que vous cochez la case, ils deviennent visibles, et leur état invalide rend instantanément l'ensemble du formulaire invalide !
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

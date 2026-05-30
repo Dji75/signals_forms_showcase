@@ -1,0 +1,123 @@
+<div class="form-container">
+  <h2>🔑 Authentication & Basic Signal Bindings</h2>
+  <p class="description">
+    This form demonstrates binding a simple model signal using <code>form()</code>, displaying standard validators with custom messages, and inspecting reactive field states.
+  </p>
+
+  <form (submit)="onSubmit($event)" novalidate>
+    <!-- Email Field -->
+    <div class="form-group">
+      <label for="email">Adresse Email</label>
+      <input
+        type="email"
+        id="email"
+        placeholder="nom@exemple.com"
+        [formField]="loginForm.email"
+        [class.is-invalid]="loginForm.email().touched() && loginForm.email().invalid()"
+        [class.is-valid]="loginForm.email().touched() && loginForm.email().valid()"
+      />
+      @if (loginForm.email().touched() && loginForm.email().invalid()) {
+        <div class="error-msg">
+          @for (error of loginForm.email().errors(); track error) {
+            <p>⚠️ {{ error.message }}</p>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Password Field -->
+    <div class="form-group">
+      <label for="password">Mot de passe</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="••••••••"
+        [formField]="loginForm.password"
+        [class.is-invalid]="loginForm.password().touched() && loginForm.password().invalid()"
+        [class.is-valid]="loginForm.password().touched() && loginForm.password().valid()"
+      />
+      @if (loginForm.password().touched() && loginForm.password().invalid()) {
+        <div class="error-msg">
+          @for (error of loginForm.password().errors(); track error) {
+            <p>⚠️ {{ error.message }}</p>
+          }
+        </div>
+      }
+
+      <!-- Password Strength derived from Signal via computed() -->
+      @if (loginForm.password().value().length > 0) {
+        <div class="strength-meter">
+          <span>Force du mot de passe : </span>
+          <span [class]="passwordStrength().class" class="font-bold">
+            {{ passwordStrength().label }}
+          </span>
+          <div class="bar-container">
+            <div
+              class="bar"
+              [class]="passwordStrength().class"
+              [style.width.%]="passwordStrength().score * 25"
+            ></div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn-primary" [disabled]="loginForm().invalid()">
+      Se Connecter
+    </button>
+  </form>
+
+  <!-- Debug State Viewers -->
+  <div class="debug-section">
+    <h3>🔍 Signal Forms Reactive State Inspection</h3>
+    <div class="debug-grid">
+      <div>
+        <h4>Model (Writable Signal):</h4>
+        <pre>{{ loginModel() | json }}</pre>
+      </div>
+      <div>
+        <h4>Form State Signals:</h4>
+        <ul>
+          <li><code>loginForm().valid()</code>: <strong [class.text-success]="loginForm().valid()">{{ loginForm().valid() }}</strong></li>
+          <li><code>loginForm().invalid()</code>: <strong [class.text-danger]="loginForm().invalid()">{{ loginForm().invalid() }}</strong></li>
+          <li><code>loginForm().dirty()</code>: <strong>{{ loginForm().dirty() }}</strong></li>
+          <li><code>loginForm().touched()</code>: <strong>{{ loginForm().touched() }}</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="field-debug">
+      <h4>Field Details (Email vs Password):</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>value()</th>
+            <th>valid()</th>
+            <th>touched()</th>
+            <th>dirty()</th>
+            <th>errors() count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>email</strong></td>
+            <td>"{{ loginForm.email().value() }}"</td>
+            <td>{{ loginForm.email().valid() }}</td>
+            <td>{{ loginForm.email().touched() }}</td>
+            <td>{{ loginForm.email().dirty() }}</td>
+            <td>{{ loginForm.email().errors().length }}</td>
+          </tr>
+          <tr>
+            <td><strong>password</strong></td>
+            <td>"{{ loginForm.password().value() }}"</td>
+            <td>{{ loginForm.password().valid() }}</td>
+            <td>{{ loginForm.password().touched() }}</td>
+            <td>{{ loginForm.password().dirty() }}</td>
+            <td>{{ loginForm.password().errors().length }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

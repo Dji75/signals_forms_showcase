@@ -1,0 +1,58 @@
+<div class="app-layout">
+  <!-- Top Navigation / Header -->
+  <header class="app-header">
+    <div class="logo-area">
+      <svg class="angular-logo" viewBox="0 0 1200 1200" width="36" height="36" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#e23237" d="M125.1 245.3 L587.8 77.2 L1050.4 245.3 L908 852.1 L587.8 1108.8 L267.5 852.1 Z"/>
+        <path fill="#b22222" d="M587.8 77.2 L1050.4 245.3 L908 852.1 L587.8 1108.8 Z"/>
+        <path fill="#ffffff" d="M587.8 190.2 L836.7 820.7 L705.5 820.7 L587.8 497 L470 820.7 L338.8 820.7 Z"/>
+        <polygon fill="#e23237" points="587.8,190.2 587.8,497 470,820.7 338.8,820.7"/>
+        <polygon fill="#b22222" points="587.8,190.2 587.8,497 705.5,820.7 836.7,820.7"/>
+        <rect fill="#ffffff" x="495.2" y="583.5" width="185.1" height="97.4"/>
+      </svg>
+      <h1>Angular v21 Signals Forms Showcase</h1>
+    </div>
+    <div class="version-tag">Experimental API v21+</div>
+  </header>
+
+  <!-- Sidebar + Content layout -->
+  <div class="main-container">
+    <aside class="sidebar">
+      <nav class="nav-menu">
+        <div class="nav-category">Concepts de base</div>
+        <a routerLink="/login" routerLinkActive="active" class="nav-item">
+          <span class="icon">🔑</span>
+          <span class="label">Connexion Simple</span>
+        </a>
+
+        <div class="nav-category">Imbrications & Disponibilité</div>
+        <a routerLink="/profile" routerLinkActive="active" class="nav-item">
+          <span class="icon">🛡️</span>
+          <span class="label">Profil & Disponibilité</span>
+        </a>
+
+        <div class="nav-category">Listes & Tableaux</div>
+        <a routerLink="/skills-array" routerLinkActive="active" class="nav-item">
+          <span class="icon">📋</span>
+          <span class="label">Tableaux de Champs</span>
+        </a>
+
+        <div class="nav-category">Cycle de vie & Actions</div>
+        <a routerLink="/submission" routerLinkActive="active" class="nav-item">
+          <span class="icon">🚀</span>
+          <span class="label">Soumission FormRoot</span>
+        </a>
+
+        <div class="nav-category">Signaux & Métriques</div>
+        <a routerLink="/booking-derived" routerLinkActive="active" class="nav-item">
+          <span class="icon">🎟️</span>
+          <span class="label">Calculs réactifs (Booking)</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="content-pane">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+.strength-meter {
+  margin-top: 0.75rem;
+  background-color: #f8fafc;
+  padding: 0.75rem;
+  border-radius: var(--border-radius);
+  border: 1px solid #e2e8f0;
+  font-size: 0.85rem;
+}
+
+.bar-container {
+  background-color: #e2e8f0;
+  height: 6px;
+  border-radius: 3px;
+  margin-top: 0.4rem;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  width: 0;
+  transition: width 0.3s ease-in-out, background-color 0.3s ease;
+  border-radius: 3px;
+}
+
+.strength-weak {
+  color: var(--danger-color);
+  background-color: var(--danger-color);
+}
+
+.strength-medium {
+  color: var(--warning-color);
+  background-color: var(--warning-color);
+}
+
+.strength-strong {
+  color: var(--success-color);
+  background-color: var(--success-color);
+}
+
+.text-gray {
+  color: var(--text-muted);
+}

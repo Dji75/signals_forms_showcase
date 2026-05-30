@@ -1,0 +1,49 @@
+.invoice-panel {
+  margin-top: 1.5rem;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.invoice-panel h3 {
+  margin-bottom: 1.25rem;
+  color: #334155;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.invoice-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.invoice-row span {
+  color: var(--text-muted);
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #cbd5e1;
+  margin: 1rem 0;
+}
+
+.total-row {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-bottom: 0;
+}
+
+.total-row span {
+  color: var(--text-main);
+}
+
+.total-row .price {
+  color: var(--secondary-color);
+  font-size: 1.35rem;
+}

@@ -1,0 +1,80 @@
+<div class="showcase-card">
+  <!-- Tab Buttons -->
+  <div class="tab-headers">
+    <button type="button" class="tab-btn" (click)="activeTab.set('demo')" [class.active]="activeTab() === 'demo'">
+      🎮 Démonstration Interactive
+    </button>
+    <button type="button" class="tab-btn" (click)="activeTab.set('ts')" [class.active]="activeTab() === 'ts'">
+      📄 Code TypeScript
+    </button>
+    <button type="button" class="tab-btn" (click)="activeTab.set('html')" [class.active]="activeTab() === 'html'">
+      🌐 Code HTML
+    </button>
+  </div>
+
+  <!-- Tab Contents -->
+  <div class="tab-content">
+    @if (activeTab() === 'demo') {
+      <div class="form-container">
+        <h2>⚠️ Perte de suivi des dépendances asynchrones</h2>
+        <p class="description">
+          Les signaux enregistrent automatiquement leurs dépendances uniquement lors de l'exécution <strong>synchrone</strong> de la fonction réactive (effet, computed, template). Tout signal lu après un point d'asynchronisme (<code>setTimeout</code>, <code>Promise</code>, <code>await</code>, <code>subscribe</code>) ne sera pas enregistré.
+        </p>
+
+        <div class="pitfall-section">
+          <div class="pitfall-header">
+            <span class="badge danger">PIÈGE ASYNC</span>
+            <h3>Suivi réactif & frontières asynchrones</h3>
+          </div>
+
+          <div class="demo-box">
+            <div class="control-row">
+              <div class="signal-display">
+                <span class="label">valSync (Suivi synchrone)</span>
+                <span class="value">{{ valSync() }}</span>
+                <button type="button" class="btn-primary btn-sm" (click)="incrementSync()">Incrémenter Sync</button>
+              </div>
+              
+              <div class="signal-display">
+                <span class="label">valAsync (Suivi asynchrone)</span>
+                <span class="value">{{ valAsync() }}</span>
+                <button type="button" class="btn-primary btn-sm" (click)="incrementAsync()">Incrémenter Async</button>
+              </div>
+            </div>
+
+            <div class="log-panel">
+              <div class="log-header">
+                <h4>Logs d'évaluation de l'effet :</h4>
+                <button type="button" class="btn-text" (click)="clearAsyncLogs()">Effacer</button>
+              </div>
+              <div class="logs-list">
+                @for (log of asyncLogs(); track $index) {
+                  <div class="log-line" [class.highlight-log]="log.includes('[Sync Read]')">{{ log }}</div>
+                } @empty {
+                  <div class="log-empty">Aucun log. Cliquez sur un bouton pour modifier l'état.</div>
+                }
+              </div>
+            </div>
+
+            <div class="instruction-box">
+              💡 <strong>Constat :</strong>
+              <ul>
+                <li>Si vous incrémentez <strong>Sync</strong>, l'effet se déclenche instantanément car <code>valSync</code> est synchrone.</li>
+                <li>L'effet affiche aussi la valeur actuelle de <code>valAsync</code> (car le <code>setTimeout</code> s'exécute).</li>
+                <li>Si vous incrémentez <strong>Async</strong>, l'effet <strong>ne se déclenche PAS</strong> ! Angular n'a pas détecté que <code>valAsync</code> a changé, car sa lecture était asynchrone et donc hors du radar de suivi.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (activeTab() === 'ts') {
+      <app-code-highlight [code]="tsCode()" language="typescript"></app-code-highlight>
+    }
+
+    @if (activeTab() === 'html') {
+      <app-code-highlight [code]="htmlCode()" language="markup"></app-code-highlight>
+    }
+  </div>
+</div>

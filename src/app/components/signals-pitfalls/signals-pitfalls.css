@@ -1,0 +1,360 @@
+.pitfall-section {
+  padding: 1.5rem 0;
+}
+
+.pitfall-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge.danger {
+  background-color: #fee2e2;
+  color: var(--danger-color);
+  border: 1px solid #fca5a5;
+}
+
+.badge.info {
+  background-color: #e0f2fe;
+  color: var(--info-text);
+  border: 1px solid #7dd3fc;
+}
+
+.explanation {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.demo-box {
+  background-color: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Control Row & Displays */
+.control-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.signal-display {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.signal-display .label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.signal-display .value {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--secondary-color);
+  line-height: 1;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.btn-xs {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+/* Log Panel */
+.log-panel {
+  background-color: #0f172a;
+  border-radius: 6px;
+  border: 1px solid #1e293b;
+  color: #f8fafc;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: 'Consolas', monospace;
+}
+
+.log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #1e293b;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.log-header h4 {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  font-weight: 600;
+  margin: 0;
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: #38bdf8;
+  font-size: 0.8rem;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.btn-text:hover {
+  text-decoration: underline;
+}
+
+.logs-list {
+  max-height: 140px;
+  overflow-y: auto;
+  font-size: 0.82rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.log-line {
+  color: #cbd5e1;
+  padding-left: 0.5rem;
+  border-left: 2px solid #ef4444;
+}
+
+.log-line.highlight-log {
+  color: #38bdf8;
+  border-left-color: #38bdf8;
+}
+
+.log-line.log-untracked {
+  color: #34d399;
+  border-left-color: #34d399;
+}
+
+.log-empty {
+  color: #64748b;
+  text-align: center;
+  padding: 1rem 0;
+  font-style: italic;
+}
+
+/* Instruction box */
+.instruction-box {
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.instruction-box ul {
+  margin-top: 0.5rem;
+  margin-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* Pitfall 2 styles */
+.user-card-demo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.state-preview pre {
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0.75rem;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.computed-preview {
+  display: flex;
+  flex-direction: column;
+}
+
+.description-bubble {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid var(--secondary-color);
+  border-radius: 6px;
+  padding: 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.action-buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.btn-danger-outline {
+  background: #fff;
+  border: 2px dashed #ef4444;
+  color: #ef4444;
+  padding: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.btn-danger-outline:hover {
+  background: #fef2f2;
+}
+
+.btn-success-outline {
+  background: #fff;
+  border: 2px solid #10b981;
+  color: #10b981;
+  padding: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.btn-success-outline:hover {
+  background: #ecfdf5;
+}
+
+.btn-danger-outline small,
+.btn-success-outline small {
+  font-family: 'Consolas', monospace;
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+.control-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.btn-secondary {
+  background-color: #e2e8f0;
+  color: #334155;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.btn-secondary:hover {
+  background-color: #cbd5e1;
+}
+
+/* Section dividers */
+.section-divider {
+  border: 0;
+  border-top: 1px solid #cbd5e1;
+  margin: 2.5rem 0;
+}
+
+/* Pitfall 4 styles */
+.error-console-box {
+  background-color: #7f1d1d;
+  color: #fca5a5;
+  border-radius: 6px;
+  padding: 1rem;
+  font-family: 'Consolas', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #ef4444;
+}
+
+.advice-box {
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #78350f;
+}
+
+.advice-box h4 {
+  color: #92400e;
+  margin-bottom: 0.5rem;
+}
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.bad-code, .good-code {
+  background-color: #ffffff;
+  border-radius: 6px;
+  padding: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.bad-code h5 {
+  color: var(--danger-color);
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.good-code h5 {
+  color: var(--success-color);
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.bad-code pre, .good-code pre {
+  margin: 0;
+  padding: 0;
+  background: none !important;
+  border: none !important;
+}
+
+.bad-code code, .good-code code {
+  font-size: 0.82rem;
+  padding: 0;
+  background: none;
+  color: inherit;
+}

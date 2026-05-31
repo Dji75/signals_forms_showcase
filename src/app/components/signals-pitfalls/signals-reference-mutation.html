@@ -1,0 +1,79 @@
+<div class="showcase-card">
+  <!-- Tab Buttons -->
+  <div class="tab-headers">
+    <button type="button" class="tab-btn" (click)="activeTab.set('demo')" [class.active]="activeTab() === 'demo'">
+      🎮 Démonstration Interactive
+    </button>
+    <button type="button" class="tab-btn" (click)="activeTab.set('ts')" [class.active]="activeTab() === 'ts'">
+      📄 Code TypeScript
+    </button>
+    <button type="button" class="tab-btn" (click)="activeTab.set('html')" [class.active]="activeTab() === 'html'">
+      🌐 Code HTML
+    </button>
+  </div>
+
+  <!-- Tab Contents -->
+  <div class="tab-content">
+    @if (activeTab() === 'demo') {
+      <div class="form-container">
+        <h2>⚠️ Mutation directe d'objets (Comparaison par Référence)</h2>
+        <p class="description">
+          Par défaut, un signal utilise l'égalité stricte (<code>===</code>) pour décider s'il doit propager un changement. Si vous modifiez un attribut d'un objet en place sans changer la référence de l'objet, Angular considère que l'état n'a pas changé.
+        </p>
+
+        <div class="pitfall-section">
+          <div class="pitfall-header">
+            <span class="badge danger">PIÈGE RÉFÉRENCE</span>
+            <h3>Immuabilité & Références de données</h3>
+          </div>
+
+          <div class="demo-box">
+            <div class="user-card-demo">
+              <div class="state-preview">
+                <strong>Signal <code>userObj()</code> (État interne brut) :</strong>
+                <pre>{{ userObj() | json }}</pre>
+              </div>
+
+              <div class="computed-preview">
+                <strong>Signal dérivé <code>userDescription()</code> :</strong>
+                <div class="description-bubble">{{ userDescription() }}</div>
+              </div>
+            </div>
+
+            <div class="action-buttons-grid">
+              <button type="button" class="btn-danger-outline" (click)="mutateDirectlyKO()">
+                ❌ Modifier directement en place (KO)
+                <small><code>userObj().age += 1; set(userObj())</code></small>
+              </button>
+              
+              <button type="button" class="btn-success-outline" (click)="updateCorrectlyOK()">
+                ✅ Modifier avec nouvelle référence (OK)
+                <small><code>update(u => (&#123; ...u, age: u.age + 1 &#125;))</code></small>
+              </button>
+            </div>
+
+            <div class="control-footer">
+              <button type="button" class="btn-secondary btn-xs" (click)="resetUser()">Réinitialiser l'utilisateur</button>
+            </div>
+
+            <div class="instruction-box">
+              💡 <strong>Constat :</strong>
+              <ul>
+                <li>Le bouton rouge incrémente l'âge de l'objet mais <strong>conserve la même référence mémoire</strong>. Bien que le JSON se mette à jour (car le template réévalue tout le composant), le signal calculé <code>userDescription()</code> ne se met <strong>PAS</strong> à jour car pour lui, l'objet n'a pas changé !</li>
+                <li>Le bouton vert retourne une nouvelle copie de l'objet (via <code>&#123; ...u &#125;</code>), provoquant instantanément le recalcul du signal dérivé.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (activeTab() === 'ts') {
+      <app-code-highlight [code]="tsCode()" language="typescript"></app-code-highlight>
+    }
+
+    @if (activeTab() === 'html') {
+      <app-code-highlight [code]="htmlCode()" language="markup"></app-code-highlight>
+    }
+  </div>
+</div>

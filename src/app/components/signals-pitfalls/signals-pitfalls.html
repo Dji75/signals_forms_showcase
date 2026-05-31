@@ -1,0 +1,224 @@
+<div class="showcase-card">
+  <!-- Tab Buttons -->
+  <div class="tab-headers">
+    <button type="button" class="tab-btn" (click)="activeTab.set('demo')" [class.active]="activeTab() === 'demo'">
+      🎮 Démonstration Interactive
+    </button>
+    <button type="button" class="tab-btn" (click)="activeTab.set('ts')" [class.active]="activeTab() === 'ts'">
+      📄 Code TypeScript (Component)
+    </button>
+    <button type="button" class="tab-btn" (click)="activeTab.set('html')" [class.active]="activeTab() === 'html'">
+      🌐 Code HTML (Template)
+    </button>
+  </div>
+
+  <!-- Tab Contents -->
+  <div class="tab-content">
+    @if (activeTab() === 'demo') {
+      <div class="form-container">
+        <h2>⚠️ Pièges des Signaux & Perte de Réactivité</h2>
+        <p class="description">
+          Cette page présente les limites de la réactivité automatique d'Angular, l'asynchronisme, la détection de changements par référence et l'usage de <code>untracked()</code>.
+        </p>
+
+        <!-- Pitfall 1: Async Tracking -->
+        <div class="pitfall-section">
+          <div class="pitfall-header">
+            <span class="badge danger">PIÈGE N°1</span>
+            <h3>Perte de suivi des dépendances asynchrones</h3>
+          </div>
+          <p class="explanation">
+            Les signaux enregistrent automatiquement leurs dépendances uniquement lors de l'exécution <strong>synchrone</strong> de la fonction réactive (effet, computed, template). Tout signal lu après un point d'asynchronisme (<code>setTimeout</code>, <code>Promise</code>, <code>await</code>, <code>subscribe</code>) ne sera pas enregistré.
+          </p>
+
+          <div class="demo-box">
+            <div class="control-row">
+              <div class="signal-display">
+                <span class="label">valSync (Suivi synchrone)</span>
+                <span class="value">{{ valSync() }}</span>
+                <button type="button" class="btn-primary btn-sm" (click)="incrementSync()">Incrémenter Sync</button>
+              </div>
+              
+              <div class="signal-display">
+                <span class="label">valAsync (Suivi asynchrone)</span>
+                <span class="value">{{ valAsync() }}</span>
+                <button type="button" class="btn-primary btn-sm" (click)="incrementAsync()">Incrémenter Async</button>
+              </div>
+            </div>
+
+            <div class="log-panel">
+              <div class="log-header">
+                <h4>Logs d'évaluation de l'effet :</h4>
+                <button type="button" class="btn-text" (click)="clearAsyncLogs()">Effacer</button>
+              </div>
+              <div class="logs-list">
+                @for (log of asyncLogs(); track $index) {
+                  <div class="log-line" [class.highlight-log]="log.includes('[Sync Read]')">{{ log }}</div>
+                } @empty {
+                  <div class="log-empty">Aucun log. Cliquez sur un bouton pour modifier l'état.</div>
+                }
+              </div>
+            </div>
+
+            <div class="instruction-box">
+              💡 <strong>Constat :</strong>
+              <ul>
+                <li>Si vous incrémentez <strong>Sync</strong>, l'effet se déclenche instantanément car <code>valSync</code> est synchrone.</li>
+                <li>L'effet affiche aussi la valeur actuelle de <code>valAsync</code> (car le <code>setTimeout</code> s'exécute).</li>
+                <li>Si vous incrémentez <strong>Async</strong>, l'effet <strong>ne se déclenche PAS</strong> ! Angular n'a pas détecté que <code>valAsync</code> a changé, car sa lecture était asynchrone et donc hors du radar de suivi.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <hr class="section-divider" />
+
+        <!-- Pitfall 2: Mutation of references -->
+        <div class="pitfall-section">
+          <div class="pitfall-header">
+            <span class="badge danger">PIÈGE N°2</span>
+            <h3>Mutation directe d'objets (Comparaison par Référence)</h3>
+          </div>
+          <p class="explanation">
+            Par défaut, un signal utilise l'égalité stricte (<code>===</code>) pour décider s'il doit propager un changement. Si vous modifiez un attribut d'un objet en place sans changer la référence de l'objet, Angular considère que l'état n'a pas changé.
+          </p>
+
+          <div class="demo-box">
+            <div class="user-card-demo">
+              <div class="state-preview">
+                <strong>Signal <code>userObj()</code> (État interne brut) :</strong>
+                <pre>{{ userObj() | json }}</pre>
+              </div>
+
+              <div class="computed-preview">
+                <strong>Signal dérivé <code>userDescription()</code> :</strong>
+                <div class="description-bubble">{{ userDescription() }}</div>
+              </div>
+            </div>
+
+            <div class="action-buttons-grid">
+              <button type="button" class="btn-danger-outline" (click)="mutateDirectlyKO()">
+                ❌ Modifier directement en place (KO)
+                <small><code>userObj().age += 1; set(userObj())</code></small>
+              </button>
+              
+              <button type="button" class="btn-success-outline" (click)="updateCorrectlyOK()">
+                ✅ Modifier avec nouvelle référence (OK)
+                <small><code>update(u => (&#123; ...u, age: u.age + 1 &#125;))</code></small>
+              </button>
+            </div>
+
+            <div class="control-footer">
+              <button type="button" class="btn-secondary btn-xs" (click)="resetUser()">Réinitialiser l'utilisateur</button>
+            </div>
+
+            <div class="instruction-box">
+              💡 <strong>Constat :</strong>
+              <ul>
+                <li>Le bouton rouge incrémente l'âge de l'objet mais <strong>conserve la même référence mémoire</strong>. Bien que le JSON se mette à jour (car le template réévalue tout le composant), le signal calculé <code>userDescription()</code> ne se met <strong>PAS</strong> à jour car pour lui, l'objet n'a pas changé !</li>
+                <li>Le bouton vert retourne une nouvelle copie de l'objet (via <code>&#123; ...u &#125;</code>), provoquant instantanément le recalcul du signal dérivé.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <hr class="section-divider" />
+
+        <!-- Pitfall 3: Untracked values -->
+        <div class="pitfall-section">
+          <div class="pitfall-header">
+            <span class="badge info">PRATIQUE RECOMMANDÉE</span>
+            <h3>Lectures non-suivies avec <code>untracked()</code></h3>
+          </div>
+          <p class="explanation">
+            Parfois, vous souhaitez lire la valeur d'un signal à l'intérieur d'un effet ou d'un calcul réactif <strong>sans</strong> que cette lecture ne crée une dépendance (c'est-à-dire sans réexécuter l'effet quand ce signal change). Vous pouvez entourer la lecture avec <code>untracked()</code>.
+          </p>
+
+          <div class="demo-box">
+            <div class="control-row">
+              <div class="signal-display">
+                <span class="label">countMain (Suivi normal)</span>
+                <span class="value">{{ countMain() }}</span>
+                <button type="button" class="btn-primary btn-sm" (click)="incrementMain()">Incrémenter Main</button>
+              </div>
+              
+              <div class="signal-display">
+                <span class="label">countUntracked (Ignoré)</span>
+                <span class="value">{{ countUntracked() }}</span>
+                <button type="button" class="btn-primary btn-sm" (click)="incrementUntracked()">Incrémenter Untracked</button>
+              </div>
+            </div>
+
+            <div class="log-panel">
+              <div class="log-header">
+                <h4>Logs d'exécution de l'effet :</h4>
+                <button type="button" class="btn-text" (click)="clearUntrackedLogs()">Effacer</button>
+              </div>
+              <div class="logs-list">
+                @for (log of untrackedLogs(); track $index) {
+                  <div class="log-line log-untracked">{{ log }}</div>
+                } @empty {
+                  <div class="log-empty">Aucun log. Cliquez sur un bouton pour modifier l'état.</div>
+                }
+              </div>
+            </div>
+
+            <div class="instruction-box">
+              💡 <strong>Constat :</strong>
+              <ul>
+                <li>Incrémenter <code>countMain</code> déclenche l'effet et affiche la valeur courante de <code>countUntracked</code>.</li>
+                <li>Incrémenter <code>countUntracked</code> ne déclenche <strong>PAS</strong> l'effet, car sa lecture est isolée dans un bloc <code>untracked()</code>.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <hr class="section-divider" />
+
+        <!-- Pitfall 4: Writes in effects -->
+        <div class="pitfall-section">
+          <div class="pitfall-header">
+            <span class="badge danger">DÉFENSE DE CONCEPTION</span>
+            <h3>Écritures interdites dans les effets (Anti-pattern)</h3>
+          </div>
+          <p class="explanation">
+            Tenter de modifier un signal d'écriture (<em>Writable Signal</em>) à l'intérieur d'un effet ou d'un calcul réactif (<code>computed</code>) est une mauvaise pratique. Par défaut, Angular v19+ lève une exception <strong>NG0600</strong> pour empêcher cela :
+          </p>
+          <pre class="error-console-box">❌ RuntimeError: NG0600: Writing to signals is not allowed in a `computed` or an `effect` by default.</pre>
+          
+          <div class="demo-box advice-box">
+            <h4>Pourquoi cette interdiction ?</h4>
+            <p>
+              Autoriser les écritures dans les effets crée des risques élevés de <strong>boucles infinies</strong> (l'effet écrit dans un signal S1, qui déclenche un autre effet qui réécrit dans un signal S2, qui redéclenche le premier effet...). Cela détruit aussi le principe du flux d'état unidirectionnel.
+            </p>
+            
+            <div class="comparison-grid">
+              <div class="bad-code">
+                <h5>❌ À éviter (Effet synchronisateur) :</h5>
+                <pre><code>effect(() => &#123;
+  const quantite = this.qty();
+  // Interdit et lève NG0600 :
+  this.prixTotal.set(quantite * 15); 
+&#125;);</code></pre>
+              </div>
+              <div class="good-code">
+                <h5>✅ Solution recommandée (Signal calculé) :</h5>
+                <pre><code>// Purement réactif et sans effet de bord :
+prixTotal = computed(() => this.qty() * 15);</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    }
+
+    @if (activeTab() === 'ts') {
+      <app-code-highlight [code]="tsCode()" language="typescript"></app-code-highlight>
+    }
+
+    @if (activeTab() === 'html') {
+      <app-code-highlight [code]="htmlCode()" language="markup"></app-code-highlight>
+    }
+  </div>
+</div>

@@ -11,7 +11,7 @@ import { CodeHighlightComponent } from '../code-highlight/code-highlight';
   styleUrl: './login.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Login implements OnInit {
+export default class Login implements OnInit {
   private http = inject(HttpClient);
 
   // Navigation Tab Signal

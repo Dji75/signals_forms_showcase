@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, signal, computed, inject, OnInit } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { CodeHighlightComponent } from '../code-highlight/code-highlight';
+import { CodeHighlightComponent } from '../../code-highlight/code-highlight';
 
 interface UserProfile {
   name: string;
@@ -15,7 +15,7 @@ interface UserProfile {
   styleUrl: './signals-reference-mutation.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SignalsReferenceMutation implements OnInit {
+export default class SignalsReferenceMutation implements OnInit {
   private readonly http = inject(HttpClient);
 
   activeTab = signal<'demo' | 'ts' | 'html'>('demo');
@@ -33,9 +33,9 @@ export class SignalsReferenceMutation implements OnInit {
   });
 
   ngOnInit() {
-    this.http.get('/source/signals-pitfalls/signals-reference-mutation.ts', { responseType: 'text' })
+    this.http.get('/source/signals-pitfalls/reference-mutation/signals-reference-mutation.ts', { responseType: 'text' })
       .subscribe({ next: code => this.tsCode.set(code), error: () => this.tsCode.set('Erreur de chargement') });
-    this.http.get('/source/signals-pitfalls/signals-reference-mutation.html', { responseType: 'text' })
+    this.http.get('/source/signals-pitfalls/reference-mutation/signals-reference-mutation.html', { responseType: 'text' })
       .subscribe({ next: code => this.htmlCode.set(code), error: () => this.htmlCode.set('Erreur de chargement') });
   }
 

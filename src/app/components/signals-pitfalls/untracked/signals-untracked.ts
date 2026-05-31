@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal, inject, OnInit, effect, untracked } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CodeHighlightComponent } from '../code-highlight/code-highlight';
+import { CodeHighlightComponent } from '../../code-highlight/code-highlight';
 
 @Component({
   selector: 'app-signals-untracked',
@@ -9,7 +9,7 @@ import { CodeHighlightComponent } from '../code-highlight/code-highlight';
   styleUrl: './signals-untracked.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SignalsUntracked implements OnInit {
+export default class SignalsUntracked implements OnInit {
   private readonly http = inject(HttpClient);
 
   activeTab = signal<'demo' | 'ts' | 'html'>('demo');
@@ -24,7 +24,6 @@ export class SignalsUntracked implements OnInit {
   constructor() {
     effect(() => {
       const main = this.countMain();
-      // On lit countUntracked de manière non suivie
       const extra = untracked(() => this.countUntracked());
 
       this.untrackedLogs.update(logs => [
@@ -35,9 +34,9 @@ export class SignalsUntracked implements OnInit {
   }
 
   ngOnInit() {
-    this.http.get('/source/signals-pitfalls/signals-untracked.ts', { responseType: 'text' })
+    this.http.get('/source/signals-pitfalls/untracked/signals-untracked.ts', { responseType: 'text' })
       .subscribe({ next: code => this.tsCode.set(code), error: () => this.tsCode.set('Erreur de chargement') });
-    this.http.get('/source/signals-pitfalls/signals-untracked.html', { responseType: 'text' })
+    this.http.get('/source/signals-pitfalls/untracked/signals-untracked.html', { responseType: 'text' })
       .subscribe({ next: code => this.htmlCode.set(code), error: () => this.htmlCode.set('Erreur de chargement') });
   }
 

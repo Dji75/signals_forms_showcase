@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal, inject, OnInit, effect } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CodeHighlightComponent } from '../code-highlight/code-highlight';
+import { CodeHighlightComponent } from '../../code-highlight/code-highlight';
 
 @Component({
   selector: 'app-signals-async-loss',
@@ -9,7 +9,7 @@ import { CodeHighlightComponent } from '../code-highlight/code-highlight';
   styleUrl: './signals-async-loss.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SignalsAsyncLoss implements OnInit {
+export default class SignalsAsyncLoss implements OnInit {
   private readonly http = inject(HttpClient);
 
   activeTab = signal<'demo' | 'ts' | 'html'>('demo');
@@ -40,9 +40,9 @@ export class SignalsAsyncLoss implements OnInit {
   }
 
   ngOnInit() {
-    this.http.get('/source/signals-pitfalls/signals-async-loss.ts', { responseType: 'text' })
+    this.http.get('/source/signals-pitfalls/async-loss/signals-async-loss.ts', { responseType: 'text' })
       .subscribe({ next: code => this.tsCode.set(code), error: () => this.tsCode.set('Erreur de chargement') });
-    this.http.get('/source/signals-pitfalls/signals-async-loss.html', { responseType: 'text' })
+    this.http.get('/source/signals-pitfalls/async-loss/signals-async-loss.html', { responseType: 'text' })
       .subscribe({ next: code => this.htmlCode.set(code), error: () => this.htmlCode.set('Erreur de chargement') });
   }
 

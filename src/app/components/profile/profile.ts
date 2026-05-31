@@ -29,7 +29,7 @@ interface ProfileModel {
   styleUrl: './profile.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Profile implements OnInit {
+export default class Profile implements OnInit {
   private http = inject(HttpClient);
 
   // Navigation Tab Signal

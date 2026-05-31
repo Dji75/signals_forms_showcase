@@ -21,7 +21,7 @@ interface SkillsModel {
   styleUrl: './skills-array.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SkillsArray implements OnInit {
+export default class SkillsArray implements OnInit {
   private http = inject(HttpClient);
 
   // Navigation Tab Signal

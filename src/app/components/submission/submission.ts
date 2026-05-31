@@ -17,7 +17,7 @@ interface RegistrationModel {
   styleUrl: './submission.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Submission implements OnInit {
+export default class Submission implements OnInit {
   private http = inject(HttpClient);
 
   // Navigation Tab Signal

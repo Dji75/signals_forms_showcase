@@ -17,7 +17,7 @@ interface BookingModel {
   styleUrl: './booking-derived.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BookingDerived implements OnInit {
+export default class BookingDerived implements OnInit {
   private http = inject(HttpClient);
 
   // Navigation Tab Signal

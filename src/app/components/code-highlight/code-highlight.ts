@@ -8,6 +8,7 @@ import {
   effect
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { CleanCodePipe } from './pipes/clean-code.pipe';
 
 // Import PrismJS core
 import * as Prism from 'prismjs';
@@ -20,9 +21,9 @@ import 'prismjs/components/prism-json';
 
 @Component({
   selector: 'app-code-highlight',
-  standalone: true,
+  imports: [CleanCodePipe],
   template: `
-    <pre [class]="'language-' + language()"><code #codeElement [class]="'language-' + language()">{{ code() }}</code></pre>
+    <pre [class]="'language-' + language()"><code #codeElement [class]="'language-' + language()">{{ code() | cleanCode:language() }}</code></pre>
   `,
   styles: [`
     pre {

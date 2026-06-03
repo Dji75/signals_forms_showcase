@@ -12,14 +12,14 @@ import { CodeHighlightComponent } from '../../code-highlight/code-highlight';
 export default class SignalsAsyncLoss implements OnInit {
   private readonly http = inject(HttpClient);
 
-  activeTab = signal<'demo' | 'ts' | 'html'>('demo');
-  tsCode = signal<string>('Chargement...');
-  htmlCode = signal<string>('Chargement...');
+  protected readonly activeTab = signal<'demo' | 'ts' | 'html'>('demo');
+  protected readonly tsCode = signal<string>('Chargement...');
+  protected readonly htmlCode = signal<string>('Chargement...');
 
   // State
-  valSync = signal<number>(0);
-  valAsync = signal<number>(0);
-  asyncLogs = signal<string[]>([]);
+  protected readonly valSync = signal<number>(0);
+  protected readonly valAsync = signal<number>(0);
+  protected readonly asyncLogs = signal<string[]>([]);
 
   constructor() {
     effect(() => {
@@ -39,22 +39,22 @@ export default class SignalsAsyncLoss implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.http.get('/source/signals-pitfalls/async-loss/signals-async-loss.ts', { responseType: 'text' })
       .subscribe({ next: code => this.tsCode.set(code), error: () => this.tsCode.set('Erreur de chargement') });
     this.http.get('/source/signals-pitfalls/async-loss/signals-async-loss.html', { responseType: 'text' })
       .subscribe({ next: code => this.htmlCode.set(code), error: () => this.htmlCode.set('Erreur de chargement') });
   }
 
-  incrementSync() {
+  protected incrementSync(): void {
     this.valSync.update(n => n + 1);
   }
 
-  incrementAsync() {
+  protected incrementAsync(): void {
     this.valAsync.update(n => n + 1);
   }
 
-  clearAsyncLogs() {
+  protected clearAsyncLogs(): void {
     this.asyncLogs.set([]);
   }
 }

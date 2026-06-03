@@ -18,10 +18,10 @@ interface RegistrationModel {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class Submission implements OnInit {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   // Navigation Tab Signal
-  activeTab = signal<'demo' | 'ts' | 'html'>('demo');
+  protected readonly activeTab = signal<'demo' | 'ts' | 'html'>('demo');
 
   private readonly INITIAL_MODEL: RegistrationModel = {
     fullName: '',
@@ -30,16 +30,16 @@ export default class Submission implements OnInit {
   };
 
   // Model signal
-  registerModel = signal<RegistrationModel>({ ...this.INITIAL_MODEL });
+  protected readonly registerModel = signal<RegistrationModel>({ ...this.INITIAL_MODEL });
 
   // Custom flag to handle loading state
-  isSubmitting = signal<boolean>(false);
+  protected readonly isSubmitting = signal<boolean>(false);
 
   // Source code signals loaded via HTTP at runtime
-  tsCode = signal<string>('Chargement du code TypeScript...');
-  htmlCode = signal<string>('Chargement du code HTML...');
+  protected readonly tsCode = signal<string>('Chargement du code TypeScript...');
+  protected readonly htmlCode = signal<string>('Chargement du code HTML...');
 
-  ngOnInit() {
+  ngOnInit(): void {
     const errorMsg = (filename: string) => 
       `⚠️ Impossible de charger "${filename}".\n\n` +
       `💡 Note : La configuration "angular.json" a été modifiée pour copier automatiquement les sources.\n` +
@@ -59,7 +59,7 @@ export default class Submission implements OnInit {
   }
 
   // Defining the form with validation AND submission action configuration
-  registerForm = form(
+  protected readonly registerForm = form(
     this.registerModel,
     (schemaPath) => {
       required(schemaPath.fullName, { message: 'Le nom complet est obligatoire' });
@@ -89,7 +89,7 @@ export default class Submission implements OnInit {
   );
 
   // Manual trigger reset button
-  manualReset() {
+  protected manualReset(): void {
     this.registerForm().reset({ ...this.INITIAL_MODEL });
     console.log('Formulaire réinitialisé manuellement.');
   }

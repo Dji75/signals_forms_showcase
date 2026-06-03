@@ -12,11 +12,11 @@ import { CodeHighlightComponent } from '../../code-highlight/code-highlight';
 export default class SignalsEffectWrites implements OnInit {
   private readonly http = inject(HttpClient);
 
-  activeTab = signal<'demo' | 'ts' | 'html'>('demo');
-  tsCode = signal<string>('Chargement...');
-  htmlCode = signal<string>('Chargement...');
+  protected readonly activeTab = signal<'demo' | 'ts' | 'html'>('demo');
+  protected readonly tsCode = signal<string>('Chargement...');
+  protected readonly htmlCode = signal<string>('Chargement...');
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.http.get('/source/signals-pitfalls/effect-writes/signals-effect-writes.ts', { responseType: 'text' })
       .subscribe({ next: code => this.tsCode.set(code), error: () => this.tsCode.set('Erreur de chargement') });
     this.http.get('/source/signals-pitfalls/effect-writes/signals-effect-writes.html', { responseType: 'text' })

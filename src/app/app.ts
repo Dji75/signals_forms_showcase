@@ -9,11 +9,10 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('signals_forms_showcase');
-  private platformId = inject(PLATFORM_ID);
+  private readonly platformId = inject(PLATFORM_ID);
 
   // Global writable signal for the active Prism syntax highlighting theme
-  selectedTheme = signal<string>('prism-tomorrow');
+  protected readonly selectedTheme = signal<string>('prism-tomorrow');
 
   constructor() {
     // 1. On startup, load any saved theme from browser's sessionStorage
@@ -40,7 +39,7 @@ export class App {
   }
 
   // Event handler for dropdown updates
-  onThemeChange(event: Event) {
+  protected onThemeChange(event: Event): void {
     const select = event.target as HTMLSelectElement;
     if (select) {
       this.selectedTheme.set(select.value);

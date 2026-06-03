@@ -12,22 +12,22 @@ import { CodeHighlightComponent } from '../code-highlight/code-highlight';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class Login implements OnInit {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   // Navigation Tab Signal
-  activeTab = signal<'demo' | 'ts' | 'html'>('demo');
+  protected readonly activeTab = signal<'demo' | 'ts' | 'html'>('demo');
 
   // Writable signal as the primary source of truth for form data
-  loginModel = signal({
+  protected readonly loginModel = signal({
     email: '',
     password: '',
   });
 
   // Source code signals loaded via HTTP at runtime
-  tsCode = signal<string>('Chargement du code TypeScript...');
-  htmlCode = signal<string>('Chargement du code HTML...');
+  protected readonly tsCode = signal<string>('Chargement du code TypeScript...');
+  protected readonly htmlCode = signal<string>('Chargement du code HTML...');
 
-  ngOnInit() {
+  ngOnInit(): void {
     const errorMsg = (filename: string) => 
       `⚠️ Impossible de charger "${filename}".\n\n` +
       `💡 Note : La configuration "angular.json" a été modifiée pour copier automatiquement les sources.\n` +
@@ -47,7 +47,7 @@ export default class Login implements OnInit {
   }
 
   // Building the FieldTree based on the signal and specifying validation rules
-  loginForm = form(this.loginModel, (schemaPath) => {
+  protected readonly loginForm = form(this.loginModel, (schemaPath) => {
     required(schemaPath.email, { message: 'L\'adresse email est obligatoire' });
     email(schemaPath.email, { message: 'Format d\'email invalide (ex: nom@domaine.com)' });
 
@@ -56,7 +56,7 @@ export default class Login implements OnInit {
   });
 
   // Derived state to track password strength reactively
-  passwordStrength = computed(() => {
+  protected readonly passwordStrength = computed(() => {
     const password = this.loginForm.password().value();
     if (!password) return { label: 'Inexistant', class: 'text-gray', score: 0 };
     if (password.length < 6) return { label: 'Trop court', class: 'strength-weak', score: 1 };
@@ -71,7 +71,7 @@ export default class Login implements OnInit {
     return { label: 'Excellent', class: 'strength-strong', score: 4 };
   });
 
-  onSubmit(event: Event) {
+  protected onSubmit(event: Event): void {
     event.preventDefault();
     
     if (this.loginForm().invalid()) {

@@ -12,14 +12,14 @@ import { CodeHighlightComponent } from '../../code-highlight/code-highlight';
 export default class SignalsUntracked implements OnInit {
   private readonly http = inject(HttpClient);
 
-  activeTab = signal<'demo' | 'ts' | 'html'>('demo');
-  tsCode = signal<string>('Chargement...');
-  htmlCode = signal<string>('Chargement...');
+  protected readonly activeTab = signal<'demo' | 'ts' | 'html'>('demo');
+  protected readonly tsCode = signal<string>('Chargement...');
+  protected readonly htmlCode = signal<string>('Chargement...');
 
   // State
-  countMain = signal<number>(0);
-  countUntracked = signal<number>(0);
-  untrackedLogs = signal<string[]>([]);
+  protected readonly countMain = signal<number>(0);
+  protected readonly countUntracked = signal<number>(0);
+  protected readonly untrackedLogs = signal<string[]>([]);
 
   constructor() {
     effect(() => {
@@ -33,22 +33,22 @@ export default class SignalsUntracked implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.http.get('/source/signals-pitfalls/untracked/signals-untracked.ts', { responseType: 'text' })
       .subscribe({ next: code => this.tsCode.set(code), error: () => this.tsCode.set('Erreur de chargement') });
     this.http.get('/source/signals-pitfalls/untracked/signals-untracked.html', { responseType: 'text' })
       .subscribe({ next: code => this.htmlCode.set(code), error: () => this.htmlCode.set('Erreur de chargement') });
   }
 
-  incrementMain() {
+  protected incrementMain(): void {
     this.countMain.update(n => n + 1);
   }
 
-  incrementUntracked() {
+  protected incrementUntracked(): void {
     this.countUntracked.update(n => n + 1);
   }
 
-  clearUntrackedLogs() {
+  protected clearUntrackedLogs(): void {
     this.untrackedLogs.set([]);
   }
 }

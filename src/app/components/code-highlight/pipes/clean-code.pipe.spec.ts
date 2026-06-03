@@ -38,12 +38,12 @@ import { Component, OnInit, signal, inject } from '@angular/core';
       expect(result).not.toContain('inject');
     });
 
-    it('should remove activeTab, tsCode, and htmlCode signals', () => {
+    it('should remove activeTab, tsCode, and htmlCode signals with encapsulation keywords', () => {
       const input = `
 export class MyComp {
-  activeTab = signal<'demo' | 'ts' | 'html'>('demo');
-  tsCode = signal<string>('Chargement...');
-  htmlCode = signal<string>('Chargement...');
+  protected readonly activeTab = signal<'demo' | 'ts' | 'html'>('demo');
+  protected readonly tsCode = signal<string>('Chargement...');
+  protected readonly htmlCode = signal<string>('Chargement...');
 }
       `;
       const result = pipe.transform(input, 'typescript');
@@ -66,6 +66,20 @@ export class MyComp implements OnInit {
       expect(result).not.toContain('implements OnInit');
       expect(result).not.toContain('ngOnInit');
     });
+
+    it('should consolidate multiple consecutive empty lines into a single blank line', () => {
+      const input = `
+export class MyComp {
+  prop1 = 1;
+
+
+
+  prop2 = 2;
+}
+      `;
+      const result = pipe.transform(input, 'typescript');
+      expect(result).toBe('export class MyComp {\n  prop1 = 1;\n\n  prop2 = 2;\n}');
+    });
   });
 
   describe('HTML Code Cleaning', () => {
@@ -84,6 +98,21 @@ export class MyComp implements OnInit {
       expect(result).not.toContain("@if (activeTab() === 'demo')");
       // Checked that indent has been reduced correctly
       expect(result).toBe('<form>\n  <input type="text" />\n</form>');
+    });
+
+    it('should consolidate multiple consecutive empty lines in HTML', () => {
+      const input = `
+<div class="showcase-card">
+  @if (activeTab() === 'demo') {
+    <div>Content 1</div>
+
+
+    <div>Content 2</div>
+  }
+</div>
+      `;
+      const result = pipe.transform(input, 'markup');
+      expect(result).toBe('<div>Content 1</div>\n\n<div>Content 2</div>');
     });
   });
 });

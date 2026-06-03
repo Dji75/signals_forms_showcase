@@ -36,7 +36,7 @@ import 'prismjs/components/prism-json';
       line-height: 1.5;
       background-color: #0f172a !important; /* Tomorrow dark slate */
       border: 1px solid #1e293b;
-      max-height: 600px;
+      max-height: calc(100vh - 300px); /* Fill remaining viewport vertical space without forcing parent scroll */
     }
     code {
       font-family: inherit;

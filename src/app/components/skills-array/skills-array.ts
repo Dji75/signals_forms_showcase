@@ -22,13 +22,13 @@ interface SkillsModel {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class SkillsArray implements OnInit {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   // Navigation Tab Signal
-  activeTab = signal<'demo' | 'ts' | 'html'>('demo');
+  protected readonly activeTab = signal<'demo' | 'ts' | 'html'>('demo');
 
   // Writable signal as the single source of truth, pre-filled with items
-  skillsModel = signal<SkillsModel>({
+  protected readonly skillsModel = signal<SkillsModel>({
     developerName: 'Ada Lovelace',
     skills: [
       { name: 'Angular', level: 'Expert' },
@@ -37,10 +37,10 @@ export default class SkillsArray implements OnInit {
   });
 
   // Source code signals loaded via HTTP at runtime
-  tsCode = signal<string>('Chargement du code TypeScript...');
-  htmlCode = signal<string>('Chargement du code HTML...');
+  protected readonly tsCode = signal<string>('Chargement du code TypeScript...');
+  protected readonly htmlCode = signal<string>('Chargement du code HTML...');
 
-  ngOnInit() {
+  ngOnInit(): void {
     const errorMsg = (filename: string) => 
       `⚠️ Impossible de charger "${filename}".\n\n` +
       `💡 Note : La configuration "angular.json" a été modifiée pour copier automatiquement les sources.\n` +
@@ -60,7 +60,7 @@ export default class SkillsArray implements OnInit {
   }
 
   // Defining form and validation schema for arrays using applyEach()
-  skillsForm = form(this.skillsModel, (schemaPath) => {
+  protected readonly skillsForm = form(this.skillsModel, (schemaPath) => {
     required(schemaPath.developerName, { message: 'Le nom du développeur est requis' });
 
     // Apply validation to each element of the skills array
@@ -71,7 +71,7 @@ export default class SkillsArray implements OnInit {
   });
 
   // Programmatically append an item to the array
-  addSkill() {
+  protected addSkill(): void {
     this.skillsModel.update((current) => ({
       ...current,
       skills: [...current.skills, { name: '', level: '' }],
@@ -79,14 +79,14 @@ export default class SkillsArray implements OnInit {
   }
 
   // Programmatically remove an item from the array by its index
-  removeSkill(index: number) {
+  protected removeSkill(index: number): void {
     this.skillsModel.update((current) => ({
       ...current,
       skills: current.skills.filter((_, i) => i !== index),
     }));
   }
 
-  onSubmit(event: Event) {
+  protected onSubmit(event: Event): void {
     event.preventDefault();
     if (this.skillsForm().invalid()) {
       console.warn('Formulaire compétences invalide');

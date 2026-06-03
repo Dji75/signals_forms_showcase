@@ -18,41 +18,41 @@ interface UserProfile {
 export default class SignalsReferenceMutation implements OnInit {
   private readonly http = inject(HttpClient);
 
-  activeTab = signal<'demo' | 'ts' | 'html'>('demo');
-  tsCode = signal<string>('Chargement...');
-  htmlCode = signal<string>('Chargement...');
+  protected readonly activeTab = signal<'demo' | 'ts' | 'html'>('demo');
+  protected readonly tsCode = signal<string>('Chargement...');
+  protected readonly htmlCode = signal<string>('Chargement...');
 
   // State
-  userObj = signal<UserProfile>({ name: 'Jean Dupont', age: 28 });
+  protected readonly userObj = signal<UserProfile>({ name: 'Jean Dupont', age: 28 });
   
   // Computed tracking userObj
-  userDescription = computed(() => {
+  protected readonly userDescription = computed(() => {
     const user = this.userObj();
     const now = new Date().toLocaleTimeString();
     return `👤 ${user.name} - ${user.age} ans (Mise à jour calculée à ${now})`;
   });
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.http.get('/source/signals-pitfalls/reference-mutation/signals-reference-mutation.ts', { responseType: 'text' })
       .subscribe({ next: code => this.tsCode.set(code), error: () => this.tsCode.set('Erreur de chargement') });
     this.http.get('/source/signals-pitfalls/reference-mutation/signals-reference-mutation.html', { responseType: 'text' })
       .subscribe({ next: code => this.htmlCode.set(code), error: () => this.htmlCode.set('Erreur de chargement') });
   }
 
-  mutateDirectlyKO() {
+  protected mutateDirectlyKO(): void {
     const current = this.userObj();
     current.age += 1;
     this.userObj.set(current);
   }
 
-  updateCorrectlyOK() {
+  protected updateCorrectlyOK(): void {
     this.userObj.update(u => ({
       ...u,
       age: u.age + 1
     }));
   }
 
-  resetUser() {
+  protected resetUser(): void {
     this.userObj.set({ name: 'Jean Dupont', age: 28 });
   }
 }

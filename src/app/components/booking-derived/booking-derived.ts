@@ -18,23 +18,23 @@ interface BookingModel {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class BookingDerived implements OnInit {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   // Navigation Tab Signal
-  activeTab = signal<'demo' | 'ts' | 'html'>('demo');
+  protected readonly activeTab = signal<'demo' | 'ts' | 'html'>('demo');
 
   // Model signal
-  bookingModel = signal<BookingModel>({
+  protected readonly bookingModel = signal<BookingModel>({
     ticketType: 'standard',
     quantity: 1,
     couponCode: '',
   });
 
   // Source code signals loaded via HTTP at runtime
-  tsCode = signal<string>('Chargement du code TypeScript...');
-  htmlCode = signal<string>('Chargement du code HTML...');
+  protected readonly tsCode = signal<string>('Chargement du code TypeScript...');
+  protected readonly htmlCode = signal<string>('Chargement du code HTML...');
 
-  ngOnInit() {
+  ngOnInit(): void {
     const errorMsg = (filename: string) => 
       `⚠️ Impossible de charger "${filename}".\n\n` +
       `💡 Note : La configuration "angular.json" a été modifiée pour copier automatiquement les sources.\n` +
@@ -54,7 +54,7 @@ export default class BookingDerived implements OnInit {
   }
 
   // Defining validation rules with cross-field validator
-  bookingForm = form(this.bookingModel, (schemaPath) => {
+  protected readonly bookingForm = form(this.bookingModel, (schemaPath) => {
     required(schemaPath.ticketType, { message: 'Veuillez sélectionner un type de billet' });
     required(schemaPath.quantity, { message: 'La quantité est obligatoire' });
     
@@ -91,14 +91,14 @@ export default class BookingDerived implements OnInit {
   });
 
   // Derived Price Calculations via computed() signals (fully reactive!)
-  ticketPrices: Record<string, number> = {
+  private readonly ticketPrices: Record<string, number> = {
     standard: 25,
     vip: 75,
     student: 15,
   };
 
   // Base price derived from selected ticketType and quantity
-  basePrice = computed(() => {
+  protected readonly basePrice = computed(() => {
     const type = this.bookingForm.ticketType().value();
     const qty = this.bookingForm.quantity().value();
     const unitPrice = this.ticketPrices[type] || 0;
@@ -106,7 +106,7 @@ export default class BookingDerived implements OnInit {
   });
 
   // Discount percentage derived from couponCode validation and value
-  discount = computed(() => {
+  protected readonly discount = computed(() => {
     const coupon = this.bookingForm.couponCode().value().trim().toUpperCase();
     const hasError = this.bookingForm.couponCode().invalid();
     
@@ -118,13 +118,13 @@ export default class BookingDerived implements OnInit {
   });
 
   // Total price subtracting any active discounts
-  totalPrice = computed(() => {
+  protected readonly totalPrice = computed(() => {
     const base = this.basePrice();
     const disc = this.discount().rate;
     return base * (1 - disc);
   });
 
-  onSubmit(event: Event) {
+  protected onSubmit(event: Event): void {
     event.preventDefault();
     if (this.bookingForm().invalid()) {
       console.warn('Formulaire réservation invalide');

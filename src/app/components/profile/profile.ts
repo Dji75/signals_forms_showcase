@@ -30,13 +30,13 @@ interface ProfileModel {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class Profile implements OnInit {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   // Navigation Tab Signal
-  activeTab = signal<'demo' | 'ts' | 'html'>('demo');
+  protected readonly activeTab = signal<'demo' | 'ts' | 'html'>('demo');
 
   // Writable signal holding the complete nested form structure
-  profileModel = signal<ProfileModel>({
+  protected readonly profileModel = signal<ProfileModel>({
     userId: 'USER-98214',
     username: 'dev_signals',
     email: 'contact@signals.dev',
@@ -55,10 +55,10 @@ export default class Profile implements OnInit {
   });
 
   // Source code signals loaded via HTTP at runtime
-  tsCode = signal<string>('Chargement du code TypeScript...');
-  htmlCode = signal<string>('Chargement du code HTML...');
+  protected readonly tsCode = signal<string>('Chargement du code TypeScript...');
+  protected readonly htmlCode = signal<string>('Chargement du code HTML...');
 
-  ngOnInit() {
+  ngOnInit(): void {
     const errorMsg = (filename: string) => 
       `⚠️ Impossible de charger "${filename}".\n\n` +
       `💡 Note : La configuration "angular.json" a été modifiée pour copier automatiquement les sources.\n` +
@@ -78,7 +78,7 @@ export default class Profile implements OnInit {
   }
 
   // Defining the form tree with conditional availability rules
-  profileForm = form(this.profileModel, (schemaPath) => {
+  protected readonly profileForm = form(this.profileModel, (schemaPath) => {
     // 1. Static Readonly Rule - Field is visible but cannot be modified
     readonly(schemaPath.userId);
 
@@ -107,7 +107,7 @@ export default class Profile implements OnInit {
     required(schemaPath.backupAddress.city, { message: 'La ville de secours est obligatoire' });
   });
 
-  onSubmit(event: Event) {
+  protected onSubmit(event: Event): void {
     event.preventDefault();
     if (this.profileForm().invalid()) {
       console.warn('Formulaire profil invalide');

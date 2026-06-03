@@ -15,9 +15,9 @@ export class CleanCodePipe implements PipeTransform {
         /import\s+[^;]*HttpClient[^;]*from\s+['"]@angular\/common\/http['"];?\r?\n?/g,
         /import\s+[^;]*CodeHighlightComponent[^;]*from\s+['"][^'"]+['"];?\r?\n?/g,
         /,?\s*CodeHighlightComponent/g,
-        /\s*(?:\/\/[^\r\n]*\r?\n)?\s*activeTab\s*=\s*signal<[^>]*>\([^)]*\);?/g,
-        /\s*(?:\/\/[^\r\n]*\r?\n)?\s*tsCode\s*=\s*signal<[^>]*>\([^)]*\);?/g,
-        /\s*(?:\/\/[^\r\n]*\r?\n)?\s*htmlCode\s*=\s*signal<[^>]*>\([^)]*\);?/g,
+        /\s*(?:\/\/[^\r\n]*\r?\n)?\s*(?:private|public|protected)?\s*(?:readonly)?\s*activeTab\s*=\s*signal(?:<[^>]*>)?\([^)]*\);?\r?\n?/g,
+        /\s*(?:\/\/[^\r\n]*\r?\n)?\s*(?:private|public|protected)?\s*(?:readonly)?\s*tsCode\s*=\s*signal(?:<[^>]*>)?\([^)]*\);?\r?\n?/g,
+        /\s*(?:\/\/[^\r\n]*\r?\n)?\s*(?:private|public|protected)?\s*(?:readonly)?\s*htmlCode\s*=\s*signal(?:<[^>]*>)?\([^)]*\);?\r?\n?/g,
         /\s*\/\/ Source code signals.*/g,
         /\bimplements\s+OnInit\b/g,
         /\s*(?:private|public|protected)?\s*(?:readonly)?\s*http\s*=\s*inject\s*\(\s*HttpClient\s*\)\s*;?/g,
@@ -38,11 +38,19 @@ export class CleanCodePipe implements PipeTransform {
       // Remove ngOnInit method block
       cleaned = this.removeNgOnInit(cleaned);
 
+      // Consolidate multiple consecutive blank lines into a single blank line
+      cleaned = cleaned.replace(/\r?\n(?:\s*\r?\n){2,}/g, '\n\n');
+
       return cleaned.trim();
     }
 
     if (language === 'markup' || language === 'html') {
-      return this.extractDemoContent(code);
+      let cleaned = this.extractDemoContent(code);
+      
+      // Consolidate multiple consecutive blank lines into a single blank line
+      cleaned = cleaned.replace(/\r?\n(?:\s*\r?\n){2,}/g, '\n\n');
+
+      return cleaned.trim();
     }
 
     return code;

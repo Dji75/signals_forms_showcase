@@ -18,7 +18,8 @@
       <div class="form-container">
         <h2>🎟️ Reactive Calculations & Cross-Field Validation</h2>
         <p class="description">
-          This page highlights the integration of <code>computed()</code> signals for real-time derived state, as well as the <code>validate()</code> context API for cross-field rules.
+          This page highlights the integration of <code>computed()</code> signals for real-time derived state, as well as the
+          <code>validate()</code> context API for cross-field rules.
         </p>
 
         <form (submit)="onSubmit($event)" novalidate>
@@ -93,7 +94,7 @@
           </div>
 
           <!-- Submit Button -->
-          <button type="submit" class="btn-primary" [disabled]="bookingForm().invalid()" style="margin-top: 1.5rem;">
+          <button type="submit" class="btn-primary" [disabled]="bookingForm().invalid()" style="margin-top: 1.5rem">
             Valider ma Réservation
           </button>
         </form>
@@ -109,12 +110,22 @@
             <div>
               <h4>Cross-Field validation statuses:</h4>
               <ul class="states-list">
-                <li><code>bookingForm().valid()</code>: <strong [class.text-success]="bookingForm().valid()">{{ bookingForm().valid() }}</strong></li>
-                <li><code>bookingForm.quantity().errors()</code> count: <strong>{{ bookingForm.quantity().errors().length }}</strong></li>
-                <li><code>bookingForm.couponCode().errors()</code> count: <strong>{{ bookingForm.couponCode().errors().length }}</strong></li>
+                <li>
+                  <code>bookingForm().valid()</code>:
+                  <strong [class.text-success]="bookingForm().valid()">{{ bookingForm().valid() }}</strong>
+                </li>
+                <li>
+                  <code>bookingForm.quantity().errors()</code> count: <strong>{{ bookingForm.quantity().errors().length }}</strong>
+                </li>
+                <li>
+                  <code>bookingForm.couponCode().errors()</code> count: <strong>{{ bookingForm.couponCode().errors().length }}</strong>
+                </li>
               </ul>
               <p class="explanation-note">
-                💡 <strong>Reactivité croisée :</strong> La validation de la quantité lit la valeur de <code>ticketType</code> en utilisant <code>valueOf(schemaPath.ticketType)</code>. Si vous mettez la quantité à 5 sur un billet Standard (valide) puis que vous changez le type de billet en "VIP", la validation de la quantité se déclenche automatiquement pour marquer la quantité en erreur !
+                💡 <strong>Reactivité croisée :</strong> La validation de la quantité lit la valeur de <code>ticketType</code> en utilisant
+                <code>valueOf(schemaPath.ticketType)</code>. Si vous mettez la quantité à 5 sur un billet Standard (valide) puis que vous
+                changez le type de billet en "VIP", la validation de la quantité se déclenche automatiquement pour marquer la quantité en
+                erreur !
               </p>
             </div>
           </div>

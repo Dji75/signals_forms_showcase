@@ -40,8 +40,13 @@
 }
 
 @keyframes logoPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 .version-tag {
@@ -197,4 +202,3 @@
   background-color: #334155;
   border-color: #475569;
 }
-

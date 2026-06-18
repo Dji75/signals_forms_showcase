@@ -40,22 +40,20 @@ export default class Submission implements OnInit {
   protected readonly htmlCode = signal<string>('Chargement du code HTML...');
 
   ngOnInit(): void {
-    const errorMsg = (filename: string) => 
+    const errorMsg = (filename: string) =>
       `⚠️ Impossible de charger "${filename}".\n\n` +
       `💡 Note : La configuration "angular.json" a été modifiée pour copier automatiquement les sources.\n` +
       `👉 Si vous voyez ce message, veuillez ARRÊTER votre serveur de développement (Ctrl+C) et le RELANCER avec "ng serve" pour appliquer la nouvelle configuration.`;
 
-    this.http.get('/source/submission/submission.ts', { responseType: 'text' })
-      .subscribe({
-        next: code => this.tsCode.set(code),
-        error: () => this.tsCode.set(errorMsg('submission.ts'))
-      });
+    this.http.get('/source/submission/submission.ts', { responseType: 'text' }).subscribe({
+      next: (code) => this.tsCode.set(code),
+      error: () => this.tsCode.set(errorMsg('submission.ts')),
+    });
 
-    this.http.get('/source/submission/submission.html', { responseType: 'text' })
-      .subscribe({
-        next: code => this.htmlCode.set(code),
-        error: () => this.htmlCode.set(errorMsg('submission.html'))
-      });
+    this.http.get('/source/submission/submission.html', { responseType: 'text' }).subscribe({
+      next: (code) => this.htmlCode.set(code),
+      error: () => this.htmlCode.set(errorMsg('submission.html')),
+    });
   }
 
   // Defining the form with validation AND submission action configuration
@@ -64,7 +62,7 @@ export default class Submission implements OnInit {
     (schemaPath) => {
       required(schemaPath.fullName, { message: 'Le nom complet est obligatoire' });
       // Validate terms and conditions
-      required(schemaPath.termsAccepted, { message: 'Vous devez accepter les conditions d\'utilisation' });
+      required(schemaPath.termsAccepted, { message: "Vous devez accepter les conditions d'utilisation" });
     },
     {
       submission: {
@@ -72,20 +70,20 @@ export default class Submission implements OnInit {
           // This is triggered automatically if the form is valid!
           this.isSubmitting.set(true);
           console.log('Soumission du formulaire en cours...');
-          
+
           // Simulate an API call
           await new Promise((resolve) => setTimeout(resolve, 2000));
-          
+
           console.log('Soumission réussie ! Données envoyées :', this.registerModel());
           alert('Inscription finalisée avec succès ! Le formulaire va être réinitialisé.');
-          
+
           this.isSubmitting.set(false);
-          
+
           // Reset interaction history (touched, dirty) and clear to initial state
           f().reset({ ...this.INITIAL_MODEL });
         },
       },
-    }
+    },
   );
 
   // Manual trigger reset button

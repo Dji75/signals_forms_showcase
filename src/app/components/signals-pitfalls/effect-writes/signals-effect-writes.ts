@@ -17,9 +17,11 @@ export default class SignalsEffectWrites implements OnInit {
   protected readonly htmlCode = signal<string>('Chargement...');
 
   ngOnInit(): void {
-    this.http.get('/source/signals-pitfalls/effect-writes/signals-effect-writes.ts', { responseType: 'text' })
-      .subscribe({ next: code => this.tsCode.set(code), error: () => this.tsCode.set('Erreur de chargement') });
-    this.http.get('/source/signals-pitfalls/effect-writes/signals-effect-writes.html', { responseType: 'text' })
-      .subscribe({ next: code => this.htmlCode.set(code), error: () => this.htmlCode.set('Erreur de chargement') });
+    this.http
+      .get('/source/signals-pitfalls/effect-writes/signals-effect-writes.ts', { responseType: 'text' })
+      .subscribe({ next: (code) => this.tsCode.set(code), error: () => this.tsCode.set('Erreur de chargement') });
+    this.http
+      .get('/source/signals-pitfalls/effect-writes/signals-effect-writes.html', { responseType: 'text' })
+      .subscribe({ next: (code) => this.htmlCode.set(code), error: () => this.htmlCode.set('Erreur de chargement') });
   }
 }

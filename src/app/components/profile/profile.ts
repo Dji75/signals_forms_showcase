@@ -59,22 +59,20 @@ export default class Profile implements OnInit {
   protected readonly htmlCode = signal<string>('Chargement du code HTML...');
 
   ngOnInit(): void {
-    const errorMsg = (filename: string) => 
+    const errorMsg = (filename: string) =>
       `⚠️ Impossible de charger "${filename}".\n\n` +
       `💡 Note : La configuration "angular.json" a été modifiée pour copier automatiquement les sources.\n` +
       `👉 Si vous voyez ce message, veuillez ARRÊTER votre serveur de développement (Ctrl+C) et le RELANCER avec "ng serve" pour appliquer la nouvelle configuration.`;
 
-    this.http.get('/source/profile/profile.ts', { responseType: 'text' })
-      .subscribe({
-        next: code => this.tsCode.set(code),
-        error: () => this.tsCode.set(errorMsg('profile.ts'))
-      });
+    this.http.get('/source/profile/profile.ts', { responseType: 'text' }).subscribe({
+      next: (code) => this.tsCode.set(code),
+      error: () => this.tsCode.set(errorMsg('profile.ts')),
+    });
 
-    this.http.get('/source/profile/profile.html', { responseType: 'text' })
-      .subscribe({
-        next: code => this.htmlCode.set(code),
-        error: () => this.htmlCode.set(errorMsg('profile.html'))
-      });
+    this.http.get('/source/profile/profile.html', { responseType: 'text' }).subscribe({
+      next: (code) => this.htmlCode.set(code),
+      error: () => this.htmlCode.set(errorMsg('profile.html')),
+    });
   }
 
   // Defining the form tree with conditional availability rules
@@ -83,8 +81,8 @@ export default class Profile implements OnInit {
     readonly(schemaPath.userId);
 
     // 2. Main field validations
-    required(schemaPath.username, { message: 'Le nom d\'utilisateur est requis' });
-    required(schemaPath.email, { message: 'L\'adresse email est requise' });
+    required(schemaPath.username, { message: "Le nom d'utilisateur est requis" });
+    required(schemaPath.email, { message: "L'adresse email est requise" });
 
     // 3. Conditional Disabled Rule - Fields are disabled when "lockProfile" is true
     disabled(schemaPath.username, ({ valueOf }) => valueOf(schemaPath.lockProfile));
@@ -93,7 +91,7 @@ export default class Profile implements OnInit {
     // 4. Conditional Hidden Rule - publicUrl is only relevant when isPublic is true
     hidden(schemaPath.publicUrl, ({ valueOf }) => !valueOf(schemaPath.isPublic));
     // Validation on publicUrl only runs if the field is visible (hidden fields do not block validation!)
-    required(schemaPath.publicUrl, { message: 'L\'URL publique est requise' });
+    required(schemaPath.publicUrl, { message: "L'URL publique est requise" });
 
     // 5. Nested object validations
     required(schemaPath.address.street, { message: 'La rue principale est obligatoire' });

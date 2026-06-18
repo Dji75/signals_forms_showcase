@@ -326,7 +326,8 @@
   margin-top: 1.5rem;
 }
 
-.bad-code, .good-code {
+.bad-code,
+.good-code {
   background-color: #ffffff;
   border-radius: 6px;
   padding: 1rem;
@@ -345,14 +346,16 @@
   font-size: 0.9rem;
 }
 
-.bad-code pre, .good-code pre {
+.bad-code pre,
+.good-code pre {
   margin: 0;
   padding: 0;
   background: none !important;
   border: none !important;
 }
 
-.bad-code code, .good-code code {
+.bad-code code,
+.good-code code {
   font-size: 0.82rem;
   padding: 0;
   background: none;

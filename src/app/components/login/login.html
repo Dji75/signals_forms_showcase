@@ -18,7 +18,8 @@
       <div class="form-container">
         <h2>🔑 Authentication & Basic Signal Bindings</h2>
         <p class="description">
-          This form demonstrates binding a simple model signal using <code>form()</code>, displaying standard validators with custom messages, and inspecting reactive field states.
+          This form demonstrates binding a simple model signal using <code>form()</code>, displaying standard validators with custom
+          messages, and inspecting reactive field states.
         </p>
 
         <form (submit)="onSubmit($event)" novalidate>
@@ -69,20 +70,14 @@
                   {{ passwordStrength().label }}
                 </span>
                 <div class="bar-container">
-                  <div
-                    class="bar"
-                    [class]="passwordStrength().class"
-                    [style.width.%]="passwordStrength().score * 25"
-                  ></div>
+                  <div class="bar" [class]="passwordStrength().class" [style.width.%]="passwordStrength().score * 25"></div>
                 </div>
               </div>
             }
           </div>
 
           <!-- Submit Button -->
-          <button type="submit" class="btn-primary" [disabled]="loginForm().invalid()">
-            Se Connecter
-          </button>
+          <button type="submit" class="btn-primary" [disabled]="loginForm().invalid()">Se Connecter</button>
         </form>
 
         <!-- Debug State Viewers -->
@@ -96,10 +91,19 @@
             <div>
               <h4>Form State Signals:</h4>
               <ul>
-                <li><code>loginForm().valid()</code>: <strong [class.text-success]="loginForm().valid()">{{ loginForm().valid() }}</strong></li>
-                <li><code>loginForm().invalid()</code>: <strong [class.text-danger]="loginForm().invalid()">{{ loginForm().invalid() }}</strong></li>
-                <li><code>loginForm().dirty()</code>: <strong>{{ loginForm().dirty() }}</strong></li>
-                <li><code>loginForm().touched()</code>: <strong>{{ loginForm().touched() }}</strong></li>
+                <li>
+                  <code>loginForm().valid()</code>: <strong [class.text-success]="loginForm().valid()">{{ loginForm().valid() }}</strong>
+                </li>
+                <li>
+                  <code>loginForm().invalid()</code>:
+                  <strong [class.text-danger]="loginForm().invalid()">{{ loginForm().invalid() }}</strong>
+                </li>
+                <li>
+                  <code>loginForm().dirty()</code>: <strong>{{ loginForm().dirty() }}</strong>
+                </li>
+                <li>
+                  <code>loginForm().touched()</code>: <strong>{{ loginForm().touched() }}</strong>
+                </li>
               </ul>
             </div>
           </div>

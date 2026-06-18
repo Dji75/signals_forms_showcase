@@ -18,7 +18,8 @@
       <div class="form-container">
         <h2>📋 Dynamic Arrays & applyEach() Schema</h2>
         <p class="description">
-          This page demonstrates managing dynamic lists of fields (arrays) using the <code>applyEach()</code> schema method. You can dynamically append, edit, or remove items and observe how identity-based tracking works.
+          This page demonstrates managing dynamic lists of fields (arrays) using the <code>applyEach()</code> schema method. You can
+          dynamically append, edit, or remove items and observe how identity-based tracking works.
         </p>
 
         <form (submit)="onSubmit($event)" novalidate>
@@ -39,9 +40,7 @@
 
           <div class="skills-header">
             <h3>🛠️ Liste des Compétences</h3>
-            <button type="button" class="btn-secondary small" (click)="addSkill()">
-              ➕ Ajouter une compétence
-            </button>
+            <button type="button" class="btn-secondary small" (click)="addSkill()">➕ Ajouter une compétence</button>
           </div>
 
           <!-- Iterate over the dynamic fields with tracking -->
@@ -89,18 +88,24 @@
 
                     <!-- Remove Button -->
                     <div class="col flex-align-end flex-shrink">
-                      <button type="button" class="btn-danger btn-icon" (click)="removeSkill(i)" title="Supprimer">
-                        🗑️
-                      </button>
+                      <button type="button" class="btn-danger btn-icon" (click)="removeSkill(i)" title="Supprimer">🗑️</button>
                     </div>
                   </div>
 
                   <!-- Individual Item Field State Debug -->
                   <div class="item-debug">
                     <span>Index #{{ i }} state:</span>
-                    <span>name.valid: <strong>{{ skillField.name().valid() }}</strong></span> | 
-                    <span>name.touched: <strong>{{ skillField.name().touched() }}</strong></span> | 
-                    <span>level.valid: <strong>{{ skillField.level().valid() }}</strong></span>
+                    <span
+                      >name.valid: <strong>{{ skillField.name().valid() }}</strong></span
+                    >
+                    |
+                    <span
+                      >name.touched: <strong>{{ skillField.name().touched() }}</strong></span
+                    >
+                    |
+                    <span
+                      >level.valid: <strong>{{ skillField.level().valid() }}</strong></span
+                    >
                   </div>
                 </div>
               }
@@ -108,7 +113,7 @@
           }
 
           <!-- Submit Button -->
-          <button type="submit" class="btn-primary" [disabled]="skillsForm().invalid()" style="margin-top: 1.5rem;">
+          <button type="submit" class="btn-primary" [disabled]="skillsForm().invalid()" style="margin-top: 1.5rem">
             Enregistrer la Liste
           </button>
         </form>
@@ -124,12 +129,20 @@
             <div>
               <h4>Form Array Summary:</h4>
               <ul class="states-list">
-                <li><code>skillsForm().valid()</code>: <strong [class.text-success]="skillsForm().valid()">{{ skillsForm().valid() }}</strong></li>
-                <li><code>skillsForm.skills.length</code>: <strong>{{ skillsForm.skills.length }}</strong></li>
-                <li><code>skillsForm().dirty()</code>: <strong>{{ skillsForm().dirty() }}</strong></li>
+                <li>
+                  <code>skillsForm().valid()</code>: <strong [class.text-success]="skillsForm().valid()">{{ skillsForm().valid() }}</strong>
+                </li>
+                <li>
+                  <code>skillsForm.skills.length</code>: <strong>{{ skillsForm.skills.length }}</strong>
+                </li>
+                <li>
+                  <code>skillsForm().dirty()</code>: <strong>{{ skillsForm().dirty() }}</strong>
+                </li>
               </ul>
               <p class="explanation-note">
-                💡 <strong>Track by identity :</strong> Dans l'architecture Angular Signal Forms, la boucle <code>&#64;for</code> utilise l'identité du champ (<code>track skillField</code>) pour préserver l'état de focalisation et l'historique d'interaction d'un élément lorsque la liste est triée, réorganisée ou modifiée.
+                💡 <strong>Track by identity :</strong> Dans l'architecture Angular Signal Forms, la boucle <code>&#64;for</code> utilise
+                l'identité du champ (<code>track skillField</code>) pour préserver l'état de focalisation et l'historique d'interaction d'un
+                élément lorsque la liste est triée, réorganisée ou modifiée.
               </p>
             </div>
           </div>

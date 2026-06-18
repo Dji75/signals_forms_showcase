@@ -41,22 +41,20 @@ export default class SkillsArray implements OnInit {
   protected readonly htmlCode = signal<string>('Chargement du code HTML...');
 
   ngOnInit(): void {
-    const errorMsg = (filename: string) => 
+    const errorMsg = (filename: string) =>
       `⚠️ Impossible de charger "${filename}".\n\n` +
       `💡 Note : La configuration "angular.json" a été modifiée pour copier automatiquement les sources.\n` +
       `👉 Si vous voyez ce message, veuillez ARRÊTER votre serveur de développement (Ctrl+C) et le RELANCER avec "ng serve" pour appliquer la nouvelle configuration.`;
 
-    this.http.get('/source/skills-array/skills-array.ts', { responseType: 'text' })
-      .subscribe({
-        next: code => this.tsCode.set(code),
-        error: () => this.tsCode.set(errorMsg('skills-array.ts'))
-      });
+    this.http.get('/source/skills-array/skills-array.ts', { responseType: 'text' }).subscribe({
+      next: (code) => this.tsCode.set(code),
+      error: () => this.tsCode.set(errorMsg('skills-array.ts')),
+    });
 
-    this.http.get('/source/skills-array/skills-array.html', { responseType: 'text' })
-      .subscribe({
-        next: code => this.htmlCode.set(code),
-        error: () => this.htmlCode.set(errorMsg('skills-array.html'))
-      });
+    this.http.get('/source/skills-array/skills-array.html', { responseType: 'text' }).subscribe({
+      next: (code) => this.htmlCode.set(code),
+      error: () => this.htmlCode.set(errorMsg('skills-array.html')),
+    });
   }
 
   // Defining form and validation schema for arrays using applyEach()

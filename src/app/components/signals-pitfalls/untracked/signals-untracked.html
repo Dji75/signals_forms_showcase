@@ -4,12 +4,8 @@
     <button type="button" class="tab-btn" (click)="activeTab.set('demo')" [class.active]="activeTab() === 'demo'">
       🎮 Démonstration Interactive
     </button>
-    <button type="button" class="tab-btn" (click)="activeTab.set('ts')" [class.active]="activeTab() === 'ts'">
-      📄 Code TypeScript
-    </button>
-    <button type="button" class="tab-btn" (click)="activeTab.set('html')" [class.active]="activeTab() === 'html'">
-      🌐 Code HTML
-    </button>
+    <button type="button" class="tab-btn" (click)="activeTab.set('ts')" [class.active]="activeTab() === 'ts'">📄 Code TypeScript</button>
+    <button type="button" class="tab-btn" (click)="activeTab.set('html')" [class.active]="activeTab() === 'html'">🌐 Code HTML</button>
   </div>
 
   <!-- Tab Contents -->
@@ -18,7 +14,9 @@
       <div class="form-container">
         <h2>⚠️ Lectures non-suivies avec untracked()</h2>
         <p class="description">
-          Parfois, vous souhaitez lire la valeur d'un signal à l'intérieur d'un effet ou d'un calcul réactif <strong>sans</strong> que cette lecture ne crée une dépendance (c'est-à-dire sans réexécuter l'effet quand ce signal change). Vous pouvez entourer la lecture avec <code>untracked()</code>.
+          Parfois, vous souhaitez lire la valeur d'un signal à l'intérieur d'un effet ou d'un calcul réactif <strong>sans</strong> que cette
+          lecture ne crée une dépendance (c'est-à-dire sans réexécuter l'effet quand ce signal change). Vous pouvez entourer la lecture avec
+          <code>untracked()</code>.
         </p>
 
         <div class="pitfall-section">
@@ -34,7 +32,7 @@
                 <span class="value">{{ countMain() }}</span>
                 <button type="button" class="btn-primary btn-sm" (click)="incrementMain()">Incrémenter Main</button>
               </div>
-              
+
               <div class="signal-display">
                 <span class="label">countUntracked (Ignoré)</span>
                 <span class="value">{{ countUntracked() }}</span>
@@ -60,7 +58,10 @@
               💡 <strong>Constat :</strong>
               <ul>
                 <li>Incrémenter <code>countMain</code> déclenche l'effet et affiche la valeur courante de <code>countUntracked</code>.</li>
-                <li>Incrémenter <code>countUntracked</code> ne déclenche <strong>PAS</strong> l'effet, car sa lecture est isolée dans un bloc <code>untracked()</code>.</li>
+                <li>
+                  Incrémenter <code>countUntracked</code> ne déclenche <strong>PAS</strong> l'effet, car sa lecture est isolée dans un bloc
+                  <code>untracked()</code>.
+                </li>
               </ul>
             </div>
           </div>

@@ -18,7 +18,9 @@
       <div class="form-container">
         <h2>🚀 Declarative Submission & FormReset</h2>
         <p class="description">
-          This page demonstrates the native <code>[formRoot]</code> directive which handles browser submission, automatically sets the <code>novalidate</code> attribute, marks all fields as touched (revealing hidden errors) on submit, and runs your async action if the form is valid.
+          This page demonstrates the native <code>[formRoot]</code> directive which handles browser submission, automatically sets the
+          <code>novalidate</code> attribute, marks all fields as touched (revealing hidden errors) on submit, and runs your async action if
+          the form is valid.
         </p>
 
         <!-- Notice the use of [formRoot]="registerForm" -->
@@ -67,9 +69,7 @@
               }
             </button>
 
-            <button type="button" class="btn-secondary" (click)="manualReset()" [disabled]="isSubmitting()">
-              🔄 Réinitialiser
-            </button>
+            <button type="button" class="btn-secondary" (click)="manualReset()" [disabled]="isSubmitting()">🔄 Réinitialiser</button>
           </div>
         </form>
 
@@ -84,13 +84,25 @@
             <div>
               <h4>Form Submission Flags:</h4>
               <ul class="states-list">
-                <li><code>registerForm().valid()</code>: <strong [class.text-success]="registerForm().valid()">{{ registerForm().valid() }}</strong></li>
-                <li><code>registerForm().dirty()</code>: <strong>{{ registerForm().dirty() }}</strong></li>
-                <li><code>registerForm().touched()</code>: <strong>{{ registerForm().touched() }}</strong></li>
-                <li><code>isSubmitting()</code>: <strong [class.text-danger]="isSubmitting()">{{ isSubmitting() }}</strong></li>
+                <li>
+                  <code>registerForm().valid()</code>:
+                  <strong [class.text-success]="registerForm().valid()">{{ registerForm().valid() }}</strong>
+                </li>
+                <li>
+                  <code>registerForm().dirty()</code>: <strong>{{ registerForm().dirty() }}</strong>
+                </li>
+                <li>
+                  <code>registerForm().touched()</code>: <strong>{{ registerForm().touched() }}</strong>
+                </li>
+                <li>
+                  <code>isSubmitting()</code>: <strong [class.text-danger]="isSubmitting()">{{ isSubmitting() }}</strong>
+                </li>
               </ul>
               <p class="explanation-note">
-                💡 <strong>Le rôle de f().reset() :</strong> Lors du reset, Angular Signal Forms efface à la fois les valeurs du modèle signal (pour qu'elles retrouvent l'état initial choisi) mais nettoie aussi tout l'historique d'interaction. Les drapeaux <code>touched</code> et <code>dirty</code> repassent à <code>false</code> afin d'éviter d'afficher les erreurs résiduelles à l'utilisateur !
+                💡 <strong>Le rôle de f().reset() :</strong> Lors du reset, Angular Signal Forms efface à la fois les valeurs du modèle
+                signal (pour qu'elles retrouvent l'état initial choisi) mais nettoie aussi tout l'historique d'interaction. Les drapeaux
+                <code>touched</code> et <code>dirty</code> repassent à <code>false</code> afin d'éviter d'afficher les erreurs résiduelles à
+                l'utilisateur !
               </p>
             </div>
           </div>

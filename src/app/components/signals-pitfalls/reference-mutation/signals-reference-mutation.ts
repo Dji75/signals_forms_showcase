@@ -24,7 +24,7 @@ export default class SignalsReferenceMutation implements OnInit {
 
   // State
   protected readonly userObj = signal<UserProfile>({ name: 'Jean Dupont', age: 28 });
-  
+
   // Computed tracking userObj
   protected readonly userDescription = computed(() => {
     const user = this.userObj();
@@ -33,10 +33,12 @@ export default class SignalsReferenceMutation implements OnInit {
   });
 
   ngOnInit(): void {
-    this.http.get('/source/signals-pitfalls/reference-mutation/signals-reference-mutation.ts', { responseType: 'text' })
-      .subscribe({ next: code => this.tsCode.set(code), error: () => this.tsCode.set('Erreur de chargement') });
-    this.http.get('/source/signals-pitfalls/reference-mutation/signals-reference-mutation.html', { responseType: 'text' })
-      .subscribe({ next: code => this.htmlCode.set(code), error: () => this.htmlCode.set('Erreur de chargement') });
+    this.http
+      .get('/source/signals-pitfalls/reference-mutation/signals-reference-mutation.ts', { responseType: 'text' })
+      .subscribe({ next: (code) => this.tsCode.set(code), error: () => this.tsCode.set('Erreur de chargement') });
+    this.http
+      .get('/source/signals-pitfalls/reference-mutation/signals-reference-mutation.html', { responseType: 'text' })
+      .subscribe({ next: (code) => this.htmlCode.set(code), error: () => this.htmlCode.set('Erreur de chargement') });
   }
 
   protected mutateDirectlyKO(): void {
@@ -46,9 +48,9 @@ export default class SignalsReferenceMutation implements OnInit {
   }
 
   protected updateCorrectlyOK(): void {
-    this.userObj.update(u => ({
+    this.userObj.update((u) => ({
       ...u,
-      age: u.age + 1
+      age: u.age + 1,
     }));
   }
 

@@ -4,21 +4,21 @@
   --primary-hover: #b22222;
   --secondary-color: #3131ab; /* Modern Indigo */
   --secondary-hover: #22227d;
-  
+
   --bg-color: #f1f5f9;
   --panel-bg: #ffffff;
   --text-main: #1e293b;
   --text-muted: #64748b;
   --border-color: #cbd5e1;
   --border-focus: #3b82f6;
-  
+
   --success-color: #10b981;
   --danger-color: #ef4444;
   --warning-color: #f59e0b;
   --info-bg: #eff6ff;
   --info-border: #bfdbfe;
   --info-text: #1e40af;
-  
+
   --border-radius: 8px;
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -108,17 +108,17 @@ label {
   user-select: none;
 }
 
-.checkbox-label input[type="checkbox"] {
+.checkbox-label input[type='checkbox'] {
   width: 1.15rem;
   height: 1.15rem;
   cursor: pointer;
   accent-color: var(--primary-color);
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"],
+input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='number'],
 select,
 textarea {
   width: 100%;
@@ -132,7 +132,9 @@ textarea {
   color: var(--text-main);
 }
 
-input:focus, select:focus, textarea:focus {
+input:focus,
+select:focus,
+textarea:focus {
   outline: none;
   border-color: var(--border-focus);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
@@ -144,7 +146,8 @@ input[readonly] {
   color: var(--text-muted);
 }
 
-input:disabled, select:disabled {
+input:disabled,
+select:disabled {
   background-color: #f1f5f9;
   cursor: not-allowed;
   color: #94a3b8;
@@ -152,12 +155,14 @@ input:disabled, select:disabled {
 }
 
 /* Validation styling */
-input.is-invalid, select.is-invalid {
+input.is-invalid,
+select.is-invalid {
   border-color: var(--danger-color) !important;
   background-color: #fef2f2;
 }
 
-input.is-invalid:focus, select.is-invalid:focus {
+input.is-invalid:focus,
+select.is-invalid:focus {
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
 }
 
@@ -194,7 +199,9 @@ input.is-valid {
 }
 
 /* Buttons */
-.btn-primary, .btn-secondary, .btn-danger {
+.btn-primary,
+.btn-secondary,
+.btn-danger {
   padding: 0.75rem 1.5rem;
   font-size: 0.95rem;
   font-weight: 600;
@@ -301,8 +308,14 @@ input.is-valid {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(5px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Debug panel styling */
@@ -405,7 +418,8 @@ pre {
   font-size: 0.85rem;
 }
 
-.field-debug th, .field-debug td {
+.field-debug th,
+.field-debug td {
   border: 1px solid #cbd5e1;
   padding: 0.5rem;
   text-align: left;
@@ -488,4 +502,3 @@ pre {
   border-radius: 0;
   font-size: inherit;
 }
-

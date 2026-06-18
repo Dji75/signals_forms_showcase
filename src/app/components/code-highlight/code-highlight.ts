@@ -1,12 +1,4 @@
-import { 
-  Component, 
-  ElementRef, 
-  ViewChild, 
-  Inject, 
-  PLATFORM_ID,
-  input,
-  effect
-} from '@angular/core';
+import { Component, ElementRef, ViewChild, Inject, PLATFORM_ID, input, effect } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { CleanCodePipe } from './pipes/clean-code.pipe';
 
@@ -23,27 +15,31 @@ import 'prismjs/components/prism-json';
   selector: 'app-code-highlight',
   imports: [CleanCodePipe],
   template: `
-    <pre [class]="'language-' + language()"><code #codeElement [class]="'language-' + language()">{{ code() | cleanCode:language() }}</code></pre>
+    <pre
+      [class]="'language-' + language()"
+    ><code #codeElement [class]="'language-' + language()">{{ code() | cleanCode:language() }}</code></pre>
   `,
-  styles: [`
-    pre {
-      margin: 0;
-      padding: 1.5rem !important;
-      border-radius: 8px !important;
-      overflow: auto;
-      font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.88rem;
-      line-height: 1.5;
-      background-color: #0f172a !important; /* Tomorrow dark slate */
-      border: 1px solid #1e293b;
-      max-height: calc(100vh - 300px); /* Fill remaining viewport vertical space without forcing parent scroll */
-    }
-    code {
-      font-family: inherit;
-      background: none !important;
-      text-shadow: none !important;
-    }
-  `]
+  styles: [
+    `
+      pre {
+        margin: 0;
+        padding: 1.5rem !important;
+        border-radius: 8px !important;
+        overflow: auto;
+        font-family: 'Consolas', 'Courier New', monospace;
+        font-size: 0.88rem;
+        line-height: 1.5;
+        background-color: #0f172a !important; /* Tomorrow dark slate */
+        border: 1px solid #1e293b;
+        max-height: calc(100vh - 300px); /* Fill remaining viewport vertical space without forcing parent scroll */
+      }
+      code {
+        font-family: inherit;
+        background: none !important;
+        text-shadow: none !important;
+      }
+    `,
+  ],
 })
 export class CodeHighlightComponent {
   // Signal inputs for reactive re-evaluation

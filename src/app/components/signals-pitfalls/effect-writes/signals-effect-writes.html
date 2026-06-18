@@ -4,12 +4,8 @@
     <button type="button" class="tab-btn" (click)="activeTab.set('demo')" [class.active]="activeTab() === 'demo'">
       🎮 Démonstration Interactive
     </button>
-    <button type="button" class="tab-btn" (click)="activeTab.set('ts')" [class.active]="activeTab() === 'ts'">
-      📄 Code TypeScript
-    </button>
-    <button type="button" class="tab-btn" (click)="activeTab.set('html')" [class.active]="activeTab() === 'html'">
-      🌐 Code HTML
-    </button>
+    <button type="button" class="tab-btn" (click)="activeTab.set('ts')" [class.active]="activeTab() === 'ts'">📄 Code TypeScript</button>
+    <button type="button" class="tab-btn" (click)="activeTab.set('html')" [class.active]="activeTab() === 'html'">🌐 Code HTML</button>
   </div>
 
   <!-- Tab Contents -->
@@ -18,7 +14,8 @@
       <div class="form-container">
         <h2>⚠️ Écritures interdites dans les effets (Anti-pattern)</h2>
         <p class="description">
-          Tenter de modifier un signal d'écriture (<em>Writable Signal</em>) à l'intérieur d'un effet ou d'un calcul réactif (<code>computed</code>) is a bad practice. Par défaut, Angular v19+ lève une exception <strong>NG0600</strong> pour empêcher cela.
+          Tenter de modifier un signal d'écriture (<em>Writable Signal</em>) à l'intérieur d'un effet ou d'un calcul réactif
+          (<code>computed</code>) is a bad practice. Par défaut, Angular v19+ lève une exception <strong>NG0600</strong> pour empêcher cela.
         </p>
 
         <div class="pitfall-section">
@@ -27,14 +24,18 @@
             <h3>NG0600 & Flux Unidirectionnel</h3>
           </div>
 
-          <pre class="error-console-box">❌ RuntimeError: NG0600: Writing to signals is not allowed in a `computed` or an `effect` by default.</pre>
-          
+          <pre class="error-console-box">
+❌ RuntimeError: NG0600: Writing to signals is not allowed in a `computed` or an `effect` by default.</pre
+          >
+
           <div class="demo-box advice-box">
             <h4>Pourquoi cette interdiction ?</h4>
             <p>
-              Autoriser les écritures dans les effets crée des risques élevés de <strong>boucles infinies</strong> (l'effet écrit dans un signal S1, qui déclenche un autre effet qui réécrit dans un signal S2, qui redéclenche le premier effet...). Cela détruit aussi le principe du flux d'état unidirectionnel.
+              Autoriser les écritures dans les effets crée des risques élevés de <strong>boucles infinies</strong> (l'effet écrit dans un
+              signal S1, qui déclenche un autre effet qui réécrit dans un signal S2, qui redéclenche le premier effet...). Cela détruit
+              aussi le principe du flux d'état unidirectionnel.
             </p>
-            
+
             <div class="comparison-grid">
               <div class="bad-code">
                 <h5>❌ À éviter (Effet synchronisateur) :</h5>

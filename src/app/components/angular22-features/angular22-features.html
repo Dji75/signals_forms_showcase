@@ -1,0 +1,218 @@
+<div class="showcase-card">
+  <!-- Tab Buttons -->
+  <div class="tab-headers">
+    <button type="button" class="tab-btn" (click)="activeTab.set('demo')" [class.active]="activeTab() === 'demo'">
+      🎮 Démo Signal Forms v22
+    </button>
+    <button type="button" class="tab-btn" (click)="activeTab.set('ts')" [class.active]="activeTab() === 'ts'">
+      📄 Code TypeScript (Component)
+    </button>
+    <button type="button" class="tab-btn" (click)="activeTab.set('html')" [class.active]="activeTab() === 'html'">
+      🌐 Code HTML (Template)
+    </button>
+  </div>
+
+  <!-- Tab Contents -->
+  <div class="tab-content">
+    @if (activeTab() === 'demo') {
+      <div class="features-container">
+        <h2>✨ Nouveautés exclusives d'Angular 22 pour les Signal Forms <span class="badge">Stable</span></h2>
+
+        <div class="highlight-box">
+          <p>
+            <strong>Angular 22</strong> apporte les deux plus grandes évolutions de l'écosystème des formulaires depuis des années : la fin
+            de l'enfer des <code>ControlValueAccessor</code> (CVA) au profit de l'interface **<code>FormValueControl</code>**, et l'arrivée
+            de la **Declarative Submission API** via la directive **<code>[formRoot]</code>** et son signal de soumission asynchrone
+            intégré.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3>🪦 RIP ControlValueAccessor → FormValueControl</h3>
+            <p>
+              Pour créer un composant de formulaire personnalisé, plus besoin d'écrire des dizaines de lignes répétitives et d'injecter des
+              tokens complexes. Avec l'interface <code>FormValueControl</code>, il vous suffit de déclarer un signal d'entrée bidirectionnel
+              <code>value = model()</code>. Le composant est instantanément compatible avec la directive <code>[formField]</code> !
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>⚡ Soumission Déclarative avec [formRoot]</h3>
+            <p>
+              Fini l'obligation d'écrire un <code>(submit)="onSubmit($event)"</code> verbeux dans le template. La directive
+              <code>[formRoot]="monFormulaire"</code> gère de manière autonome la prévention du rechargement de page et déclenche la
+              fonction de soumission configurée en TypeScript.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>⏳ Signal Intégré .submitting()</h3>
+            <p>
+              L'instance de formulaire expose désormais un signal en lecture seule <code>.submitting()</code>. Il passe automatiquement à
+              <code>true</code> durant l'exécution de votre action de soumission asynchrone et repasse à <code>false</code> une fois
+              terminée, simplifiant drastiquement l'implémentation de spinners ou de désactivation de boutons.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>🤖 Interopérabilité & Alignement OnPush</h3>
+            <p>
+              Ces nouvelles fonctionnalités s'intègrent sans effort avec le mode de détection de changement <code>OnPush</code> par défaut
+              d'Angular 22, minimisant les cycles de rendu et offrant des performances d'affichage optimales.
+            </p>
+          </div>
+        </div>
+
+        <!-- Interactive Playground -->
+        <div class="demo-playground">
+          <h3>🎮 Démo Live : Inscription Newsletter via l'API Angular 22</h3>
+          <p class="description">
+            Ce formulaire exploite à 100% les nouveautés spécifiques à la v22 d'Angular. Observez l'état réactif et la désactivation
+            automatique pendant l'appel réseau fictif lors de la soumission !
+          </p>
+
+          <div class="playground-grid">
+            <!-- Left: Form -->
+            <div
+              class="form-container"
+              style="background: white; padding: 1.5rem; border-radius: var(--border-radius); border: 1px solid #e2e8f0"
+            >
+              <!-- [formRoot] gère entièrement et de façon déclarative le cycle de vie de soumission -->
+              <form [formRoot]="newsletterForm">
+                <!-- 1. Custom Input utilisant FormValueControl (RIP CVA) -->
+                <div class="form-group">
+                  <label for="fullName">Nom complet (Composant Personnalisé v22)</label>
+                  <app-custom-input
+                    id="fullName"
+                    [formField]="newsletterForm.fullName"
+                    [class.is-invalid]="newsletterForm.fullName().touched() && newsletterForm.fullName().invalid()"
+                    [class.is-valid]="newsletterForm.fullName().touched() && newsletterForm.fullName().valid()"
+                  ></app-custom-input>
+                  @if (newsletterForm.fullName().touched() && newsletterForm.fullName().invalid()) {
+                    <div class="error-msg">
+                      @for (error of newsletterForm.fullName().errors(); track error) {
+                        <p>⚠️ {{ error.message }}</p>
+                      }
+                    </div>
+                  }
+                </div>
+
+                <!-- 2. Standard Email Input -->
+                <div class="form-group" style="margin-top: 1rem">
+                  <label for="email">Adresse Email (Champ Standard)</label>
+                  <input
+                    type="email"
+                    id="email"
+                    placeholder="jean.dupont@exemple.com"
+                    [formField]="newsletterForm.email"
+                    [class.is-invalid]="newsletterForm.email().touched() && newsletterForm.email().invalid()"
+                    [class.is-valid]="newsletterForm.email().touched() && newsletterForm.email().valid()"
+                  />
+                  @if (newsletterForm.email().touched() && newsletterForm.email().invalid()) {
+                    <div class="error-msg">
+                      @for (error of newsletterForm.email().errors(); track error) {
+                        <p>⚠️ {{ error.message }}</p>
+                      }
+                    </div>
+                  }
+                </div>
+
+                <!-- 3. Accept Terms Checkbox -->
+                <div class="form-group checkbox-group" style="display: flex; align-items: flex-start; gap: 0.5rem; margin-top: 1rem">
+                  <input type="checkbox" id="acceptTerms" [formField]="newsletterForm.acceptTerms" style="margin-top: 0.25rem" />
+                  <label for="acceptTerms" style="font-size: 0.9rem; cursor: pointer">
+                    J'accepte de recevoir des emails d'actualités.
+                  </label>
+                </div>
+                @if (newsletterForm.acceptTerms().touched() && newsletterForm.acceptTerms().invalid()) {
+                  <div class="error-msg" style="margin-top: -0.5rem; margin-bottom: 1rem">
+                    @for (error of newsletterForm.acceptTerms().errors(); track error) {
+                      <p>⚠️ {{ error.message }}</p>
+                    }
+                  </div>
+                }
+
+                <!-- Bouton tirant parti du signal .submitting() de la v22 -->
+                <button
+                  type="submit"
+                  class="btn-primary"
+                  style="margin-top: 1.5rem; width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.5rem"
+                  [disabled]="newsletterForm().invalid() || newsletterForm().submitting()"
+                >
+                  @if (newsletterForm().submitting()) {
+                    <span
+                      class="spinner"
+                      style="
+                        display: inline-block;
+                        width: 16px;
+                        height: 16px;
+                        border: 2px solid white;
+                        border-top-color: transparent;
+                        border-radius: 50%;
+                        animation: spin 0.8s linear infinite;
+                      "
+                    ></span>
+                    Enregistrement en cours...
+                  } @else {
+                    <span>S'abonner à la Newsletter</span>
+                  }
+                </button>
+              </form>
+            </div>
+
+            <!-- Right: State Inspection -->
+            <div class="debug-section" style="margin-top: 0">
+              <h3>🔍 Inspection Réactive de la Soumission v22</h3>
+              <div class="debug-grid" style="grid-template-columns: 1fr">
+                <div>
+                  <h4>Modèle de données (Model):</h4>
+                  <pre
+                    style="background: #0f172a; color: #38bdf8; padding: 1rem; border-radius: var(--border-radius); font-size: 0.85rem"
+                    >{{ newsletterModel() | json }}</pre
+                  >
+                </div>
+                <div>
+                  <h4>État réactif des Signaux de Formulaire :</h4>
+                  <ul style="list-style-type: none; padding-left: 0; font-size: 0.9rem; line-height: 2">
+                    <li>
+                      ⏳ <code>newsletterForm().submitting()</code> :
+                      <strong [class.text-danger]="newsletterForm().submitting()" [class.text-success]="!newsletterForm().submitting()">
+                        {{ newsletterForm().submitting() }}
+                      </strong>
+                    </li>
+                    <li>
+                      💻 <code>newsletterForm().valid()</code> :
+                      <strong [class.text-success]="newsletterForm().valid()">
+                        {{ newsletterForm().valid() }}
+                      </strong>
+                    </li>
+                    <li>
+                      👉 <code>newsletterForm.fullName().value()</code> : <strong>"{{ newsletterForm.fullName().value() }}"</strong>
+                    </li>
+                    <li>
+                      📧 <code>newsletterForm.email().value()</code> : <strong>"{{ newsletterForm.email().value() }}"</strong>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (activeTab() === 'ts') {
+      <app-code-highlight language="typescript" [code]="tsCode()"></app-code-highlight>
+    }
+
+    @if (activeTab() === 'html') {
+      <app-code-highlight language="markup" [code]="htmlCode()"></app-code-highlight>
+    }
+  </div>
+</div>
+
+<style>
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>

@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, Inject, PLATFORM_ID, input, effect } from '@angular/core';
+import { Component, ElementRef, ViewChild, Inject, PLATFORM_ID, input, effect, ChangeDetectionStrategy } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { CleanCodePipe } from './pipes/clean-code.pipe';
 
@@ -19,6 +19,7 @@ import 'prismjs/components/prism-json';
       [class]="'language-' + language()"
     ><code #codeElement [class]="'language-' + language()">{{ code() | cleanCode:language() }}</code></pre>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [
     `
       pre {

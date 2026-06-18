@@ -23,6 +23,10 @@ export default [
     loadComponent: () => import('./components/booking-derived/booking-derived'),
   },
   {
+    path: 'angular22-features',
+    loadComponent: () => import('./components/angular22-features/angular22-features'),
+  },
+  {
     path: 'signals-pitfalls',
     loadChildren: () => import('./components/signals-pitfalls/signals-pitfalls.routes'),
   },

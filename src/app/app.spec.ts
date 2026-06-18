@@ -21,6 +21,6 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Angular v21 Signals Forms Showcase');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Angular v22 Signals Forms Showcase');
   });
 });

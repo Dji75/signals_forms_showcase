@@ -1,0 +1,38 @@
+/* Container for input and inline spinner */
+.input-container-spinner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-container-spinner input {
+  padding-right: 2.5rem; /* Make room for the spinner */
+}
+
+.spinner-inline {
+  position: absolute;
+  right: 0.85rem;
+  font-size: 1rem;
+  animation: spin 1.5s linear infinite;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Info text displayed under the field during validation */
+.info-text-pending {
+  font-size: 0.82rem;
+  color: var(--warning-color);
+  font-weight: 500;
+  display: block;
+  margin-top: 0.2rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

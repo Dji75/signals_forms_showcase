@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { delay } from 'rxjs/operators';
 
 export default [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -9,6 +11,19 @@ export default [
   {
     path: 'profile',
     loadComponent: () => import('./components/profile/profile'),
+    providers: [
+      provideHttpClient(
+        withInterceptors([
+          (req, next) => {
+            // Simulate an API call taking 3 seconds to check if a username is taken
+            if (req.url.includes('/api/taken-usernames.json')) {
+              return next(req).pipe(delay(3000));
+            }
+            return next(req);
+          },
+        ])
+      ),
+    ],
   },
   {
     path: 'skills-array',

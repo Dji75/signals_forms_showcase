@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, signal, inject, OnInit } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { form, FormField, required, hidden, disabled, readonly } from '@angular/forms/signals';
+import { form, FormField, required, hidden, disabled, readonly, validateHttp, debounce } from '@angular/forms/signals';
 import { CodeHighlightComponent } from '../code-highlight/code-highlight';
 
 interface ProfileModel {
@@ -83,6 +83,40 @@ export default class Profile implements OnInit {
     // 2. Main field validations
     required(schemaPath.username, { message: "Le nom d'utilisateur est requis" });
     required(schemaPath.email, { message: "L'adresse email est requise" });
+
+    // Asynchronous validation for username availability via Local Mock API
+    // We debounce the username field by 500ms to avoid querying on every keystroke
+    debounce(schemaPath.username, 500);
+    validateHttp(schemaPath.username, {
+      request: ({ value }) => {
+        const username = value();
+        // Skip validation if value is empty or too short
+        if (!username || username.length < 3) {
+          return undefined;
+        }
+        // Fetch the list of taken usernames (dev server serves this from the public folder)
+        // We append the username as a query parameter to ensure the resource URL is unique
+        // and triggers a reload whenever the username changes.
+        return `/api/taken-usernames.json?username=${encodeURIComponent(username)}`;
+      },
+      onSuccess: (takenUsernames: string[], { value }) => {
+        const username = value()?.toLowerCase();
+        if (username && takenUsernames.includes(username)) {
+          return {
+            kind: 'usernameTaken',
+            message: `Le nom d'utilisateur "${value()}" est déjà pris (ex: admin, root, superman).`,
+          };
+        }
+        return null;
+      },
+      onError: (error) => {
+        console.error('Erreur de validation asynchrone :', error);
+        return {
+          kind: 'serverError',
+          message: "Impossible de vérifier la disponibilité du nom d'utilisateur",
+        };
+      },
+    });
 
     // 3. Conditional Disabled Rule - Fields are disabled when "lockProfile" is true
     disabled(schemaPath.username, ({ valueOf }) => valueOf(schemaPath.lockProfile));

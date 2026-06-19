@@ -41,15 +41,23 @@
           </div>
 
           <div class="row">
-            <!-- Username (disabled conditionally) -->
+            <!-- Username (disabled conditionally with async validation) -->
             <div class="form-group col">
               <label for="username">Nom d'utilisateur</label>
-              <input
-                type="text"
-                id="username"
-                [formField]="profileForm.username"
-                [class.is-invalid]="profileForm.username().touched() && profileForm.username().invalid()"
-              />
+              <div class="input-container-spinner">
+                <input
+                  type="text"
+                  id="username"
+                  [formField]="profileForm.username"
+                  [class.is-invalid]="profileForm.username().touched() && profileForm.username().invalid()"
+                />
+                @if (profileForm.username().pending()) {
+                  <span class="spinner-inline">⏳</span>
+                }
+              </div>
+              @if (profileForm.username().pending()) {
+                <span class="info-text-pending">Vérification de la disponibilité...</span>
+              }
               @if (profileForm.username().touched() && profileForm.username().invalid()) {
                 <span class="error-text">⚠️ {{ profileForm.username().errors()[0]?.message }}</span>
               }
@@ -193,6 +201,9 @@
                 </li>
                 <li>
                   <code>profileForm.username().disabled()</code>: <strong>{{ profileForm.username().disabled() }}</strong>
+                </li>
+                <li>
+                  <code>profileForm.username().pending()</code>: <strong [class.text-warning]="profileForm.username().pending()">{{ profileForm.username().pending() }}</strong>
                 </li>
                 <li>
                   <code>backupAddress.street</code>: valid = <strong>{{ profileForm.backupAddress.street().valid() }}</strong

@@ -1,0 +1,186 @@
+<div class="showcase-card">
+  <!-- Tab Headers -->
+  <div class="tab-headers">
+    <button type="button" class="tab-btn" (click)="activeTab.set('demo')" [class.active]="activeTab() === 'demo'">
+      🎮 Démo FormValueControl
+    </button>
+    <button type="button" class="tab-btn" (click)="activeTab.set('starsTs')" [class.active]="activeTab() === 'starsTs'">
+      📄 Code TS (StarRating)
+    </button>
+    <button type="button" class="tab-btn" (click)="activeTab.set('starsHtml')" [class.active]="activeTab() === 'starsHtml'">
+      🌐 Code HTML (StarRating)
+    </button>
+    <button type="button" class="tab-btn" (click)="activeTab.set('moodTs')" [class.active]="activeTab() === 'moodTs'">
+      📄 Code TS (MoodSelector)
+    </button>
+    <button type="button" class="tab-btn" (click)="activeTab.set('moodHtml')" [class.active]="activeTab() === 'moodHtml'">
+      🌐 Code HTML (MoodSelector)
+    </button>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    @if (activeTab() === 'demo') {
+      <div class="features-container">
+        <h2>🎨 Révolution des Custom Controls : <code>FormValueControl</code></h2>
+
+        <div class="highlight-box">
+          <p>
+            Avant Angular 22, créer un composant de formulaire réutilisable nécessitait l'utilisation de l'interface fastidieuse
+            <strong><code>ControlValueAccessor</code> (CVA)</strong>. Il fallait implémenter 4 méthodes, gérer manuellement la propagation
+            du statut, et enregistrer des tokens d'injection complexes (<code>NG_VALUE_ACCESSOR</code>).
+          </p>
+          <p style="margin-top: 0.5rem">
+            Désormais, avec **<code>FormValueControl</code>**, il vous suffit d'implémenter l'interface et de déclarer une propriété **<code
+              >value = model()</code
+            >** (un signal bidirectionnel). Angular s'occupe de synchroniser ce signal de façon bidirectionnelle avec le système de
+            formulaires !
+          </p>
+        </div>
+
+        <!-- Playground Grid -->
+        <div class="demo-playground">
+          <h3>🎮 Formulaire d'Évaluation de Service</h3>
+          <p class="description">
+            Ce formulaire intègre deux composants personnalisés distincts basés sur <code>FormValueControl</code> : un sélecteur
+            d'humeur/réaction et un sélecteur d'étoiles. Ils se lient de manière totalement transparente avec <code>[formField]</code>.
+          </p>
+
+          <div class="playground-grid">
+            <!-- Left Column: Form -->
+            <div class="form-container">
+              <form [formRoot]="feedbackForm">
+                <!-- 1. Mood Selector (Custom FormValueControl) -->
+                <div class="form-group">
+                  <label>Comment s'est passée votre expérience ?</label>
+                  <app-mood-selector [formField]="feedbackForm.mood"></app-mood-selector>
+                </div>
+
+                <!-- 2. Star Rating Selector (Custom FormValueControl) -->
+                <div class="form-group" style="margin-top: 1.5rem">
+                  <label for="rating-stars">Sélectionnez votre note</label>
+                  <div>
+                    <app-star-rating id="rating-stars" [formField]="feedbackForm.stars"></app-star-rating>
+                  </div>
+                  @if (feedbackForm.stars().touched() && feedbackForm.stars().invalid()) {
+                    <div class="error-msg">
+                      <p>⚠️ {{ feedbackForm.stars().errors()[0]?.message }}</p>
+                    </div>
+                  }
+                </div>
+
+                <!-- 3. Comments textarea -->
+                <div class="form-group" style="margin-top: 1.5rem">
+                  <label for="comment">Racontez-nous en détails...</label>
+                  <textarea
+                    id="comment"
+                    placeholder="Saisissez vos remarques ici..."
+                    [formField]="feedbackForm.comment"
+                    rows="4"
+                    [class.is-invalid]="feedbackForm.comment().touched() && feedbackForm.comment().invalid()"
+                  ></textarea>
+                  @if (feedbackForm.comment().touched() && feedbackForm.comment().invalid()) {
+                    <div class="error-msg">
+                      <p>⚠️ {{ feedbackForm.comment().errors()[0]?.message }}</p>
+                    </div>
+                  }
+                </div>
+
+                <!-- Submit Button -->
+                <button
+                  type="submit"
+                  class="btn-primary"
+                  style="margin-top: 1.5rem; width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.5rem"
+                  [disabled]="feedbackForm().invalid() || feedbackForm().submitting()"
+                >
+                  @if (feedbackForm().submitting()) {
+                    <span class="spinner"></span>
+                    Envoi du retour en cours...
+                  } @else {
+                    🚀 Envoyer mon avis
+                  }
+                </button>
+              </form>
+            </div>
+
+            <!-- Right Column: Visualizer -->
+            <div class="state-visualizer">
+              <h3>📊 État Réactif du Formulaire</h3>
+              <div class="state-cards">
+                <div class="state-card">
+                  <span class="state-label">Valeur du Modèle (Source unique) :</span>
+                  <pre class="json-preview">{{ feedbackModel() | json }}</pre>
+                </div>
+
+                <div class="state-card" style="margin-top: 1rem">
+                  <span class="state-label">Statuts Réactifs (Signals de v22) :</span>
+                  <div class="metric-row">
+                    <span class="metric-name">Formulaire valide :</span>
+                    <span class="metric-badge" [class.success]="feedbackForm().valid()">
+                      {{ feedbackForm().valid() ? 'OUI' : 'NON' }}
+                    </span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-name">Formulaire modifié (Dirty) :</span>
+                    <span class="metric-badge" [class.warn]="feedbackForm().dirty()">
+                      {{ feedbackForm().dirty() ? 'OUI' : 'NON' }}
+                    </span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-name">Soumission en cours (Submitting) :</span>
+                    <span class="metric-badge" [class.info]="feedbackForm().submitting()">
+                      {{ feedbackForm().submitting() ? 'OUI' : 'NON' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (activeTab() === 'starsTs') {
+      <div class="code-container">
+        <h3>📄 Code TypeScript du Composant <code>StarRatingComponent</code></h3>
+        <p class="description">
+          Observez l'implémentation de l'interface <code>FormValueControl&lt;number&gt;</code> et l'usage du signal bidirectionnel
+          <code>value = model()</code>.
+        </p>
+        <app-code-highlight [code]="starsTsCode()" language="typescript"></app-code-highlight>
+      </div>
+    }
+
+    @if (activeTab() === 'starsHtml') {
+      <div class="code-container">
+        <h3>⭐ Code HTML du Composant <code>StarRatingComponent</code></h3>
+        <p class="description">
+          Le template HTML utilise le nouveau flux de contrôle d'Angular (<code>&#64;for</code> et <code>&#64;if</code>) pour gérer
+          l'affichage dynamique des étoiles.
+        </p>
+        <app-code-highlight [code]="starsHtmlCode()" language="html"></app-code-highlight>
+      </div>
+    }
+
+    @if (activeTab() === 'moodTs') {
+      <div class="code-container">
+        <h3>📄 Code TypeScript du Composant <code>MoodSelectorComponent</code></h3>
+        <p class="description">
+          L'implémentation de l'interface <code>FormValueControl&lt;MoodType&gt;</code> permet au sélecteur d'humeur d'agir comme un
+          véritable contrôle de formulaire.
+        </p>
+        <app-code-highlight [code]="moodTsCode()" language="typescript"></app-code-highlight>
+      </div>
+    }
+
+    @if (activeTab() === 'moodHtml') {
+      <div class="code-container">
+        <h3>😭 Code HTML du Composant <code>MoodSelectorComponent</code></h3>
+        <p class="description">
+          Le template HTML utilise la directive standard de liaison bidirectionnelle d'Angular 22 avec <code>[formField]</code>.
+        </p>
+        <app-code-highlight [code]="moodHtmlCode()" language="html"></app-code-highlight>
+      </div>
+    }
+  </div>
+</div>

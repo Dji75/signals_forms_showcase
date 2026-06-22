@@ -1,0 +1,57 @@
+.mood-wrapper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  outline: none;
+}
+
+.mood-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: white;
+  border: 2px solid #e2e8f0;
+  padding: 0.75rem 0.5rem;
+  border-radius: var(--border-radius, 12px);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+}
+
+.mood-card:hover {
+  transform: translateY(-2px);
+  border-color: #cbd5e1;
+}
+
+.mood-card.selected {
+  border-color: var(--selected-color);
+  background-color: #f8fafc;
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.emoji {
+  font-size: 2.25rem;
+  line-height: 1;
+  transition: transform 0.2s;
+}
+
+.mood-card.selected .emoji {
+  transform: scale(1.2);
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.mood-card.selected .label {
+  color: #1e293b;
+}
+
+.mood-wrapper:focus-visible .mood-card.selected {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+}

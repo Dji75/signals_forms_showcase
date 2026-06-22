@@ -1,0 +1,29 @@
+<div
+  class="rating-container"
+  role="slider"
+  aria-label="Évaluation par étoiles"
+  [ariaValueNow]="value() || 0"
+  ariaValueMin="0"
+  ariaValueMax="5"
+  tabindex="0"
+  (keydown)="onKeyDown($event)"
+  (mouseleave)="hoverValue.set(null)"
+>
+  @for (star of stars; track star) {
+    <button
+      type="button"
+      class="star-btn"
+      [class.filled]="isStarred(star)"
+      (mouseenter)="hoverValue.set(star)"
+      (click)="selectRating(star)"
+      [attr.aria-label]="star + ' étoiles sur 5'"
+    >
+      ★
+    </button>
+  }
+  @if (value() !== null) {
+    <span class="rating-text">{{ value() }}/5</span>
+  } @else {
+    <span class="rating-text-placeholder">Aucune note</span>
+  }
+</div>

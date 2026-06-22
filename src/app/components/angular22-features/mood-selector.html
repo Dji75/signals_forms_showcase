@@ -1,0 +1,16 @@
+<div class="mood-wrapper" role="radiogroup" aria-label="Sélection de votre humeur" tabindex="0" (keydown)="onKeyDown($event)">
+  @for (option of options; track option.value) {
+    <button
+      type="button"
+      class="mood-card"
+      [class.selected]="value() === option.value"
+      [style.--selected-color]="option.color"
+      (click)="value.set(option.value)"
+      [attr.aria-checked]="value() === option.value"
+      role="radio"
+    >
+      <span class="emoji">{{ option.emoji }}</span>
+      <span class="label">{{ option.label }}</span>
+    </button>
+  }
+</div>

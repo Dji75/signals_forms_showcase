@@ -21,7 +21,7 @@ export default [
             }
             return next(req);
           },
-        ])
+        ]),
       ),
     ],
   },
@@ -40,6 +40,10 @@ export default [
   {
     path: 'angular22-features',
     loadComponent: () => import('./components/angular22-features/angular22-features'),
+  },
+  {
+    path: 'form-value-control',
+    loadComponent: () => import('./components/angular22-features/form-value-control-demo'),
   },
   {
     path: 'signals-pitfalls',
